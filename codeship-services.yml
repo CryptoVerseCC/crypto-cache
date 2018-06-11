@@ -1,0 +1,8 @@
+cache-purr:
+  build:
+    image: userfeeds/cache-purr
+    dockerfile: Dockerfile
+  cached: true
+
+deploy:
+  image: userfeeds/deploy:latest

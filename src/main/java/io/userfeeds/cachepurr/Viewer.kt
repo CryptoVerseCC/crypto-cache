@@ -1,4 +1,4 @@
-package io.userfeeds
+package io.userfeeds.cachepurr
 
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.RequestMapping

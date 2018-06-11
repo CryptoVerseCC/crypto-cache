@@ -1,4 +1,4 @@
-package io.userfeeds
+package io.userfeeds.cachepurr
 
 import io.reactivex.Observable
 import retrofit2.http.GET
