@@ -23,7 +23,7 @@ class Viewer(private val store: Store) {
         return Page(totalPages = totalPages, total = store.cache.size, items = items)
     }
 
-    private fun getItemsBefore(after: String?) = store.cache.reversed().takeWhile { it["id"] as String != after }
+    private fun getItemsBefore(after: String?) = store.cache.takeWhile { it["id"] as String != after }
 
     private fun getXItems(size: Int) = store.cache.take(size)
 
