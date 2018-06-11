@@ -19,7 +19,7 @@ class CacheUpdater(private val store: Store) {
             .build()
             .create(CryptoPurrApi::class.java)
 
-    @Scheduled(fixedDelay = 60_000)
+    @Scheduled(fixedDelay = 5_000)
     fun updateCache() {
         val response = api.getPurrs().blockingFirst().items
         store.cache = response
