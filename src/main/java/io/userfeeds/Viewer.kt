@@ -15,7 +15,7 @@ class Viewer(private val store: Store) {
                  @RequestParam("before", required = false) before: String?): Page {
         val items = when {
             after != null && size != null -> getItemsAfter(after, size)
-            before != null -> getItemsBefore(after)
+            before != null -> getItemsBefore(before)
             size != null -> getXItems(size)
             else -> throw IllegalArgumentException("After, size  or before must be provided!")
         }
@@ -23,7 +23,7 @@ class Viewer(private val store: Store) {
         return Page(totalPages = totalPages, total = store.cache.size, items = items)
     }
 
-    private fun getItemsBefore(after: String?) = store.cache.takeWhile { it["id"] as String != after }
+    private fun getItemsBefore(before: String?) = store.cache.takeWhile { it["id"] as String != before }
 
     private fun getXItems(size: Int) = store.cache.take(size)
 
