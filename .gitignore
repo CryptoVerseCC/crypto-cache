@@ -2,3 +2,4 @@ build
 output
 .gradle
 out
+.idea
