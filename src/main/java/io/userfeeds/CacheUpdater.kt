@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.concurrent.TimeUnit
 
 @Component
 class CacheUpdater(private val store: Store) {
@@ -15,7 +16,10 @@ class CacheUpdater(private val store: Store) {
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(MoshiConverterFactory.create())
             .baseUrl("https://api.userfeeds.io/ranking/")
-            .client(OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor()).build())
+            .client(OkHttpClient.Builder()
+                    .addInterceptor(HttpLoggingInterceptor())
+                    .readTimeout(20, TimeUnit.SECONDS)
+                    .build())
             .build()
             .create(CryptoPurrApi::class.java)
 

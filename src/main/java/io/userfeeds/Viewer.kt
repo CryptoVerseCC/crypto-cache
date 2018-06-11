@@ -12,23 +12,34 @@ class Viewer(private val store: Store) {
     @CrossOrigin(origins = ["*"])
     fun getPurrs(@RequestParam("after", required = false) after: String?,
                  @RequestParam("size", required = false) size: Int?,
-                 @RequestParam("before", required = false) before: String?): Page {
+                 @RequestParam("before", required = false) before: String?,
+                 @RequestParam("catId", required = false) catId: String?): Page {
+        val allItems = store.cache
+        val filteredItems = if (catId != null) filterByCatId(allItems, catId) else filterOutLikes(allItems)
         val items = when {
-            after != null && size != null -> getItemsAfter(after, size)
-            before != null -> getItemsBefore(before)
-            size != null -> getXItems(size)
+            after != null && size != null -> getItemsAfter(after, size, filteredItems)
+            before != null -> getItemsBefore(before, filteredItems)
+            size != null -> getXItems(size, filteredItems)
             else -> throw IllegalArgumentException("After, size  or before must be provided!")
         }
-        val totalPages = if (size != null) store.cache.size / size else 1
-        return Page(totalPages = totalPages, total = store.cache.size, items = items)
+        val totalPages = if (size != null) filteredItems.size / size else 1
+        return Page(totalPages = totalPages, total = filteredItems.size, items = items)
     }
 
-    private fun getItemsBefore(before: String?) = store.cache.takeWhile { it["id"] as String != before }
+    private fun filterOutLikes(items: List<Map<String, Any>>): List<Map<String, Any>> {
+        return items.filter { it["type"] as String != "like" }
+    }
 
-    private fun getXItems(size: Int) = store.cache.take(size)
+    private fun filterByCatId(items: List<Map<String, Any>>, catId: String): List<Map<String, Any>> {
+        return items.filter { it["context"] as String == catId || (it["about"] as? Map<String,Any>)?.get("id") == catId }
+    }
 
-    private fun getItemsAfter(after: String?, size: Int) =
-            store.cache.dropWhile { it["id"] as String != after }.drop(1).take(size)
+    private fun getItemsBefore(before: String?, items: List<Map<String, Any>>) = items.takeWhile { it["id"] as String != before }
+
+    private fun getXItems(size: Int, items: List<Map<String, Any>>) = items.take(size)
+
+    private fun getItemsAfter(after: String?, size: Int, items: List<Map<String, Any>>) =
+            items.dropWhile { it["id"] as String != after }.drop(1).take(size)
 }
 
 data class Page(val items: List<Any>, val totalPages: Int, val total: Int)
