@@ -9,4 +9,4 @@ interface CryptoPurrApi {
     fun getPurrs() : Observable<ItemsWrapper>
 }
 
-data class ItemsWrapper(val items:List<Any>)
+data class ItemsWrapper(val items:List<Map<String,Any>>)

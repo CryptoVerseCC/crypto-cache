@@ -4,5 +4,5 @@ import org.springframework.stereotype.Component
 
 @Component
 class Store {
-    var cache: List<Any> = emptyList()
+    var cache: List<Map<String, Any>> = emptyList()
 }
