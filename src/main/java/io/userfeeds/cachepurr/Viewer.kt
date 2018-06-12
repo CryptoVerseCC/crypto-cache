@@ -1,6 +1,5 @@
 package io.userfeeds.cachepurr
 
-import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController
 class Viewer(private val store: Store) {
 
     @RequestMapping("/purrs")
-    @CrossOrigin(origins = ["*"])
     fun getPurrs(@RequestParam("after", required = false) after: String?,
                  @RequestParam("size", required = false) size: Int?,
                  @RequestParam("before", required = false) before: String?,
@@ -31,7 +29,7 @@ class Viewer(private val store: Store) {
     }
 
     private fun filterByCatId(items: List<Map<String, Any>>, catId: String): List<Map<String, Any>> {
-        return items.filter { it["context"] as String == catId || (it["about"] as? Map<String,Any>)?.get("id") == catId }
+        return items.filter { it["context"] as String == catId || (it["about"] as? Map<String, Any>)?.get("id") == catId }
     }
 
     private fun getItemsBefore(before: String?, items: List<Map<String, Any>>) = items.takeWhile { it["id"] as String != before }
