@@ -18,7 +18,7 @@ class Viewer(private val store: Store) {
             after != null && size != null -> getItemsAfter(after, size, filteredItems)
             before != null -> getItemsBefore(before, filteredItems)
             size != null -> getXItems(size, filteredItems)
-            else -> throw IllegalArgumentException("After, size  or before must be provided!")
+            else -> throw IllegalArgumentException("After, size or before must be provided.")
         }
         val totalPages = if (size != null) filteredItems.size / size else 1
         return Page(totalPages = totalPages, total = filteredItems.size, items = items)
