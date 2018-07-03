@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class Viewer(private val repository: Repository) {
+class Viewer2(private val repository: Repository) {
 
     @RequestMapping("/cryptoverse_feed")
     fun getFeed(
