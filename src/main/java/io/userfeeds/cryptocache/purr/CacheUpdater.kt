@@ -1,4 +1,4 @@
-package io.userfeeds.cachepurr
+package io.userfeeds.cryptocache.purr
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

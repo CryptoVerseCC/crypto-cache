@@ -1,6 +1,6 @@
-cache-purr:
+crypto-cache:
   build:
-    image: userfeeds/cache-purr
+    image: userfeeds/crypto-cache
     dockerfile: Dockerfile
   cached: true
 

@@ -1,4 +1,4 @@
-package io.userfeeds.cachepurr
+package io.userfeeds.cryptocache.purr
 
 import io.reactivex.Observable
 import retrofit2.http.GET
