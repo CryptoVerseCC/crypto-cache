@@ -3,7 +3,7 @@ package io.userfeeds.cryptocache.cryptoverse
 import org.springframework.stereotype.Component
 
 @Component
-class Repository {
+class CryptoverseFeedRepository {
 
     var cache: List<Map<String, Any>> = emptyList()
 }

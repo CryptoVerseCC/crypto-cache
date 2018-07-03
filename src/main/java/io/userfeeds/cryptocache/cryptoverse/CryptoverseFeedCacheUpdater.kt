@@ -10,7 +10,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
 @Component
-class CacheUpdater2(private val repository: Repository) {
+class CryptoverseFeedCacheUpdater(private val repository: CryptoverseFeedRepository) {
 
     private val api = Retrofit.Builder()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class Viewer2(private val repository: Repository) {
+class CryptoverseFeedController(private val repository: CryptoverseFeedRepository) {
 
     @RequestMapping("/cryptoverse_feed")
     fun getFeed(
@@ -17,7 +17,7 @@ class Viewer2(private val repository: Repository) {
                 .runIf(before != null) { takeWhile { it["id"] as String != before } }
                 .runIf(after != null) { dropWhile { it["id"] as String != after }.drop(1) }
                 .runIf(size != null) { take(size!!) }
-        val totalPages = if (size != null) allItems.size / size else null
+        val totalPages = if (size != null) (allItems.size + size - 1) / size else null
         return Page(items = items, totalPages = totalPages, total = allItems.size)
     }
 }
