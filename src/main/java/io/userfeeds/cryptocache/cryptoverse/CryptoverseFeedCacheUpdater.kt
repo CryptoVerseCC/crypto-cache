@@ -25,6 +25,34 @@ class CryptoverseFeedCacheUpdater(private val repository: CryptoverseFeedReposit
 
     @Scheduled(fixedDelay = 5_000)
     fun updateCache() {
-        repository.cache = api.getFeed().blockingFirst().items
+        val oldCache = repository.cache
+        val idToOldRoot = oldCache.allItems.associateBy { it["id"] }
+        val newAllItems = api.getFeed().blockingFirst().items
+        val version = System.currentTimeMillis()
+        newAllItems.forEach {
+            val oldItem = idToOldRoot[it["id"]]
+            it["version"] = if (equalByAmountOfRepliesAndLikes(it, oldItem)) (oldItem!!["version"] as Long) else version
+        }
+        repository.cache = Cache(newAllItems, version)
+    }
+
+    private fun equalByAmountOfRepliesAndLikes(newItem: MutableMap<String, Any>, oldItem: MutableMap<String, Any>?): Boolean {
+        if (oldItem == null) {
+            return false
+        }
+        if ((newItem["likes"] as List<*>).size != (oldItem["likes"] as List<*>).size) {
+            return false
+        }
+        if ((newItem["replies"] as List<*>).size != (oldItem["replies"] as List<*>).size) {
+            return false
+        }
+        val idToOldReply = (oldItem["replies"] as List<Map<String, Any>>).associateBy { it["id"] }
+        (newItem["replies"] as List<Map<String, Any>>).forEach {
+            val oldReply = idToOldReply[it["id"]] ?: return false
+            if ((it["likes"] as List<*>).size != (oldReply["likes"] as List<*>).size) {
+                return false
+            }
+        }
+        return true
     }
 }

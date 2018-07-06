@@ -5,5 +5,7 @@ import org.springframework.stereotype.Component
 @Component
 class CryptoverseFeedRepository {
 
-    var cache: List<Map<String, Any>> = emptyList()
+    var cache = Cache(emptyList(), 0)
 }
+
+data class Cache(val allItems: List<MutableMap<String, Any>>, val version: Long)

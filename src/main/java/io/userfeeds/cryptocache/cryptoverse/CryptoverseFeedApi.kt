@@ -1,7 +1,6 @@
 package io.userfeeds.cryptocache.cryptoverse
 
 import io.reactivex.Observable
-import io.userfeeds.cryptocache.purr.ItemsWrapper
 import retrofit2.http.GET
 
 interface CryptoverseFeedApi {
@@ -10,4 +9,4 @@ interface CryptoverseFeedApi {
     fun getFeed(): Observable<ItemsWrapper>
 }
 
-data class ItemsWrapper(val items: List<Map<String, Any>>)
+data class ItemsWrapper(val items: List<MutableMap<String, Any>>)

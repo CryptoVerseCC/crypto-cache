@@ -25,8 +25,6 @@ class CacheUpdater(private val store: Store) {
 
     @Scheduled(fixedDelay = 5_000)
     fun updateCache() {
-        val response = api.getPurrs().blockingFirst().items
-        store.cache = response
-        println("Cache updated! ${System.currentTimeMillis()}")
+        store.cache = api.getPurrs().blockingFirst().items
     }
 }
