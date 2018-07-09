@@ -3,7 +3,7 @@ package io.userfeeds.cryptocache.cryptoverse
 import io.reactivex.Observable
 import retrofit2.http.GET
 
-interface CryptoverseFeedApi {
+interface FeedApi {
 
     @GET("cryptoverse_feed")
     fun getFeed(): Observable<ItemsWrapper>

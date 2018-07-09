@@ -10,7 +10,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
 @Component
-class CryptoverseFeedCacheUpdater(private val repository: CryptoverseFeedRepository) {
+class FeedCacheUpdater(private val repository: FeedRepository) {
 
     private val api = Retrofit.Builder()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -21,7 +21,7 @@ class CryptoverseFeedCacheUpdater(private val repository: CryptoverseFeedReposit
                     .readTimeout(20, TimeUnit.SECONDS)
                     .build())
             .build()
-            .create(CryptoverseFeedApi::class.java)
+            .create(FeedApi::class.java)
 
     @Scheduled(fixedDelay = 5_000)
     fun updateCache() {
