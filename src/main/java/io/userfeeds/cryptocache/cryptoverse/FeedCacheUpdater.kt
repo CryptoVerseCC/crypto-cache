@@ -18,7 +18,7 @@ class FeedCacheUpdater(private val repository: FeedRepository) {
             .baseUrl("https://api.userfeeds.io/ranking/")
             .client(OkHttpClient.Builder()
                     .addInterceptor(HttpLoggingInterceptor())
-                    .readTimeout(20, TimeUnit.SECONDS)
+                    .readTimeout(60, TimeUnit.SECONDS)
                     .build())
             .build()
             .create(FeedApi::class.java)
