@@ -16,13 +16,16 @@ class FeedController(private val repository: FeedRepository) {
         val cache = repository.cache
         var version: Long? = cache.version
         val items = if (oldestKnown != null && lastVersion != null) {
+            check(size == null)
             val almost = cache.allItems.takeWhile { it["id"] != oldestKnown }
-            val unfiltered = almost + cache.allItems[almost.size]
+            val unfiltered = almost + if (almost.size < cache.allItems.size) cache.allItems[almost.size] else emptyMap<String, Any>()
             unfiltered.filter { it["version"] as Long > lastVersion }
         } else if (oldestKnown != null && size != null) {
+            check(lastVersion == null)
             version = null
             cache.allItems.dropWhile { it["id"] != oldestKnown }.drop(1).take(size)
         } else if (size != null) {
+            check(oldestKnown == null && lastVersion == null)
             cache.allItems.take(size)
         } else {
             throw UnsupportedOperationException("oldestKnown+lastVersion, oldestKnown+size or size missing")
