@@ -35,8 +35,4 @@ class FeedController(private val repository: FeedRepository) {
     }
 }
 
-inline fun <T> T.runIf(condition: Boolean, block: T.() -> T): T {
-    return if (condition) block() else this
-}
-
 data class Page(val items: List<Any>, val total: Int, val version: Long?)

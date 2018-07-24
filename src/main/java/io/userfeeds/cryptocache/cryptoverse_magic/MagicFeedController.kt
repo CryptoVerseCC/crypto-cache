@@ -35,8 +35,4 @@ class MagicFeedController(private val repository: MagicFeedRepository) {
     }
 }
 
-inline fun <T> T.runIf(condition: Boolean, block: T.() -> T): T {
-    return if (condition) block() else this
-}
-
 data class Page(val items: List<Any>, val total: Int, val version: Long?)
