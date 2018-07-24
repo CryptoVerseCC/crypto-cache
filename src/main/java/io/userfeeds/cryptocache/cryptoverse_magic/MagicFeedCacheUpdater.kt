@@ -29,9 +29,10 @@ class MagicFeedCacheUpdater(private val repository: FeedRepository) {
         val idToOldRoot = oldCache.allItems.associateBy { it["id"] }
         val newAllItems = api.getFeed().blockingFirst().items
         val version = System.currentTimeMillis()
-        newAllItems.forEach {
-            val oldItem = idToOldRoot[it["id"]]
-            it["version"] = if (equalByAmountOfRepliesAndLikes(it, oldItem)) (oldItem!!["version"] as Long) else version
+        (listOf(null) + newAllItems).zipWithNext().forEach { (prev, current) ->
+            val oldItem = idToOldRoot[current!!["id"]]
+            current["version"] = if (equalByAmountOfRepliesAndLikes(current, oldItem)) (oldItem!!["version"] as Long) else version
+            prev?.get("id")?.let { current["after"] = it }
         }
         repository.cache = Cache(newAllItems, version)
     }
