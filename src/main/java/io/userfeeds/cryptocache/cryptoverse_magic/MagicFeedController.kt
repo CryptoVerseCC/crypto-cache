@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController
 import java.lang.UnsupportedOperationException
 
 @RestController
-class FeedController(private val repository: FeedRepository) {
+class MagicFeedController(private val repository: MagicFeedRepository) {
 
     @RequestMapping("/cryptoverse_feed_magic")
     fun getFeed(

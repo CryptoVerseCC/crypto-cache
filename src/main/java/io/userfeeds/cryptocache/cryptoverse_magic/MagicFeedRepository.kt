@@ -3,7 +3,7 @@ package io.userfeeds.cryptocache.cryptoverse_magic
 import org.springframework.stereotype.Component
 
 @Component
-class FeedRepository {
+class MagicFeedRepository {
 
     var cache = Cache(emptyList(), 0)
 }

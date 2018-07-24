@@ -10,7 +10,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
 @Component
-class MagicFeedCacheUpdater(private val repository: FeedRepository) {
+class MagicFeedCacheUpdater(private val repository: MagicFeedRepository) {
 
     private val api = Retrofit.Builder()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -21,7 +21,7 @@ class MagicFeedCacheUpdater(private val repository: FeedRepository) {
                     .readTimeout(60, TimeUnit.SECONDS)
                     .build())
             .build()
-            .create(FeedApi::class.java)
+            .create(MagicFeedApi::class.java)
 
     @Scheduled(fixedDelay = 1_000)
     fun updateCache() {
