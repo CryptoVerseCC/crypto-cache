@@ -1,5 +1,6 @@
 package io.userfeeds.cryptocache.cryptoverse
 
+import io.userfeeds.cryptocache.logger
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.springframework.scheduling.annotation.Scheduled
@@ -23,7 +24,7 @@ class FeedCacheUpdater(private val repository: FeedRepository) {
             .build()
             .create(FeedApi::class.java)
 
-    @Scheduled(fixedDelay = 5_000)
+    @Scheduled(fixedDelay = 1_000)
     fun updateCache() {
         val oldCache = repository.cache
         val idToOldRoot = oldCache.allItems.associateBy { it["id"] }
@@ -34,6 +35,7 @@ class FeedCacheUpdater(private val repository: FeedRepository) {
             it["version"] = if (equalByAmountOfRepliesAndLikes(it, oldItem)) (oldItem!!["version"] as Long) else version
         }
         repository.cache = Cache(newAllItems, version)
+        logger.info("Update cache ${javaClass.simpleName}")
     }
 
     private fun equalByAmountOfRepliesAndLikes(newItem: MutableMap<String, Any>, oldItem: MutableMap<String, Any>?): Boolean {

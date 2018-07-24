@@ -1,5 +1,6 @@
 package io.userfeeds.cryptocache.cryptoverse_magic
 
+import io.userfeeds.cryptocache.logger
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.springframework.scheduling.annotation.Scheduled
@@ -35,6 +36,7 @@ class MagicFeedCacheUpdater(private val repository: MagicFeedRepository) {
             prev?.get("id")?.let { current["after"] = it }
         }
         repository.cache = Cache(newAllItems, version)
+        logger.info("Update cache ${javaClass.simpleName}")
     }
 
     private fun equalByAmountOfRepliesAndLikes(newItem: MutableMap<String, Any>, oldItem: MutableMap<String, Any>?): Boolean {

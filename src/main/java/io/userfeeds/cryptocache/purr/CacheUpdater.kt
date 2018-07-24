@@ -1,5 +1,6 @@
 package io.userfeeds.cryptocache.purr
 
+import io.userfeeds.cryptocache.logger
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.springframework.scheduling.annotation.Scheduled
@@ -26,5 +27,6 @@ class CacheUpdater(private val store: Store) {
     @Scheduled(fixedDelay = 5_000)
     fun updateCache() {
         store.cache = api.getPurrs().blockingFirst().items
+        logger.info("Update cache ${javaClass.simpleName}")
     }
 }
