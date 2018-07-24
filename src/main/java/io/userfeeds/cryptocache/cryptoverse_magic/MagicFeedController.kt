@@ -14,6 +14,7 @@ class MagicFeedController(private val repository: MagicFeedRepository) {
             @RequestParam("lastVersion", required = false) lastVersion: Long?,
             @RequestParam("size", required = false) size: Int?): Page {
         val cache = repository.cache
+        check(cache.allItems.isNotEmpty()) { "API is not ready." }
         var version: Long? = cache.version
         val items = if (oldestKnown != null && lastVersion != null) {
             check(size == null)
