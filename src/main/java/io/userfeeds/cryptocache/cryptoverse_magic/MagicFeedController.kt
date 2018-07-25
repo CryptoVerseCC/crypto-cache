@@ -3,7 +3,6 @@ package io.userfeeds.cryptocache.cryptoverse_magic
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import java.lang.UnsupportedOperationException
 
 @RestController
 class MagicFeedController(private val repository: MagicFeedRepository) {
