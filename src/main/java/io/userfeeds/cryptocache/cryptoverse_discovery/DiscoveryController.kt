@@ -10,11 +10,11 @@ class DiscoveryController(private val repository: DiscoveryRepository, private v
 
     @RequestMapping("/cryptoverse_discovery")
     fun getDiscovery(@RequestParam("asset") asset: String): Discovery {
-        var discovery = repository.get(asset)
-        if (discovery == null) {
-            updater.updateForAsset(asset)
-            discovery = repository.get(asset)!!
-        }
+        var discovery = repository.get(asset)!!
+//        if (discovery == null) {
+//            updater.updateForAsset(asset)
+//            discovery = repository.get(asset)!!
+//        }
         return discovery
     }
 }
