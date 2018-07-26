@@ -1,5 +1,6 @@
 package io.userfeeds.cryptocache.cryptoverse_discovery
 
+import io.userfeeds.cryptocache.apiBaseUrl
 import io.userfeeds.cryptocache.logger
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -18,7 +19,7 @@ class DiscoveryCacheUpdater(private val repository: DiscoveryRepository) {
         Retrofit.Builder()
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(MoshiConverterFactory.create())
-                .baseUrl("https://api.userfeeds.io/ranking/")
+                .baseUrl(apiBaseUrl)
                 .client(OkHttpClient.Builder()
                         .addInterceptor(HttpLoggingInterceptor().setLevel(HEADERS))
                         .readTimeout(60, TimeUnit.SECONDS)

@@ -1,5 +1,6 @@
 package io.userfeeds.cryptocache.cryptoverse_magic
 
+import io.userfeeds.cryptocache.apiBaseUrl
 import io.userfeeds.cryptocache.logger
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -16,7 +17,7 @@ class MagicFeedCacheUpdater(private val repository: MagicFeedRepository) {
     private val api = Retrofit.Builder()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(MoshiConverterFactory.create())
-            .baseUrl("https://api.userfeeds.io/ranking/")
+            .baseUrl(apiBaseUrl)
             .client(OkHttpClient.Builder()
                     .addInterceptor(HttpLoggingInterceptor())
                     .readTimeout(60, TimeUnit.SECONDS)

@@ -1,5 +1,6 @@
 package io.userfeeds.cryptocache.purr
 
+import io.userfeeds.cryptocache.apiBaseUrl
 import io.userfeeds.cryptocache.logger
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -16,7 +17,7 @@ class CacheUpdater(private val store: Store) {
     private val api = Retrofit.Builder()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(MoshiConverterFactory.create())
-            .baseUrl("https://api.userfeeds.io/ranking/")
+            .baseUrl(apiBaseUrl)
             .client(OkHttpClient.Builder()
                     .addInterceptor(HttpLoggingInterceptor())
                     .readTimeout(60, TimeUnit.SECONDS)
