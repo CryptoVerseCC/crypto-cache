@@ -19,7 +19,7 @@ class DiscoveryRepository {
 
     fun put(asset: String, discovery: Discovery) {
         assets.add(asset)
-        //discoveries.put(asset, discovery)
+        discoveries.put(asset, discovery)
     }
 }
 
