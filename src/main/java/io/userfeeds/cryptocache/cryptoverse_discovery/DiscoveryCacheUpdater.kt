@@ -27,7 +27,7 @@ class DiscoveryCacheUpdater(private val repository: DiscoveryRepository) {
                 .create(DiscoveryApi::class.java)
     }
 
-    @Scheduled(fixedDelay = 5_000)
+    @Scheduled(fixedDelay = 300_000)
     fun updateCache() {
         val assets = repository.assets.toList()
         assets.forEach(this::updateForAsset)
