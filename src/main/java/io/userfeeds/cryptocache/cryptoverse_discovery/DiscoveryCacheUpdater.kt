@@ -3,8 +3,6 @@ package io.userfeeds.cryptocache.cryptoverse_discovery
 import io.userfeeds.cryptocache.apiBaseUrl
 import io.userfeeds.cryptocache.logger
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import okhttp3.logging.HttpLoggingInterceptor.Level.*
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import retrofit2.Retrofit
@@ -21,14 +19,13 @@ class DiscoveryCacheUpdater(private val repository: DiscoveryRepository) {
                 .addConverterFactory(MoshiConverterFactory.create())
                 .baseUrl(apiBaseUrl)
                 .client(OkHttpClient.Builder()
-                        .addInterceptor(HttpLoggingInterceptor().setLevel(HEADERS))
                         .readTimeout(60, TimeUnit.SECONDS)
                         .build())
                 .build()
                 .create(DiscoveryApi::class.java)
     }
 
-    @Scheduled(fixedDelay = 300_000)
+    @Scheduled(fixedDelay = 1_000)
     fun updateCache() {
         val assets = repository.assets.toList()
         assets.forEach(this::updateForAsset)

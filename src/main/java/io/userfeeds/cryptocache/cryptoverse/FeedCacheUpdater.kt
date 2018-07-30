@@ -3,7 +3,6 @@ package io.userfeeds.cryptocache.cryptoverse
 import io.userfeeds.cryptocache.apiBaseUrl
 import io.userfeeds.cryptocache.logger
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import retrofit2.Retrofit
@@ -19,7 +18,6 @@ class FeedCacheUpdater(private val repository: FeedRepository) {
             .addConverterFactory(MoshiConverterFactory.create())
             .baseUrl(apiBaseUrl)
             .client(OkHttpClient.Builder()
-                    .addInterceptor(HttpLoggingInterceptor())
                     .readTimeout(60, TimeUnit.SECONDS)
                     .build())
             .build()
