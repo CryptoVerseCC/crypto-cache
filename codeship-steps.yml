@@ -9,7 +9,7 @@
         encrypted_dockercfg_path: dockercfg.encrypted
 
       - service: deploy
-        tag: '^\d+\.\d+\.\d+'
+        tag: '^\d+\.\d+\.\d+$'
         command: /app/deploy_crypto_cache.sh jazz
         registry: https://index.docker.io/v1/
         encrypted_dockercfg_path: dockercfg.encrypted
