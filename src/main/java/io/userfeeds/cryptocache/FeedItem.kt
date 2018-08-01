@@ -15,7 +15,7 @@ val FeedItem.likes
     @Suppress("UNCHECKED_CAST")
     get() = this["likes"] as List<FeedItem>
 
-class FeedItemIdExtractor : ItemIdExtractor<FeedItem> {
+object FeedItemIdExtractor : ItemIdExtractor<FeedItem> {
     override fun extractContextsFromItem(item: FeedItem): List<String> {
         return (listOf(item.context)
                 + item.replies.flatMap { it.likes.map(FeedItem::context) + it.context }

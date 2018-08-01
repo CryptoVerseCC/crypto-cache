@@ -32,7 +32,7 @@ class MagicFeedCacheUpdater(private val repository: MagicFeedRepository,
         val oldCache = repository.cache
         val idToOldRoot = oldCache.allItems.associateBy { it["id"] }
         val newAllItems = api.getFeed().blockingFirst().items
-        openSeaItemInterceptor.addOpenSeaData(newAllItems, ::OpenSeaToFeedAddingVisitor, FeedItemIdExtractor())
+        openSeaItemInterceptor.addOpenSeaData(newAllItems, ::OpenSeaToFeedAddingVisitor, FeedItemIdExtractor)
         val version = System.currentTimeMillis()
         (listOf(null) + newAllItems).zipWithNext().forEach { (prev, current) ->
             val oldItem = idToOldRoot[current!!["id"]]

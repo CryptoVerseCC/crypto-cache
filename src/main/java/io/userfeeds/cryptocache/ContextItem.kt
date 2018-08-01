@@ -10,7 +10,7 @@ typealias ContextItem = MutableMap<String, Any>
 val ContextItem.context
     get() = this["context"] as String?
 
-class ContextItemIdExtractor : ItemIdExtractor<ContextItem> {
+object ContextItemIdExtractor : ItemIdExtractor<ContextItem> {
     override fun extractContextsFromItem(item: ContextItem): List<String> {
         return listOfNotNull(item.context)
     }

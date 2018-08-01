@@ -34,7 +34,7 @@ class FeedCacheUpdater(private val repository: FeedRepository,
             val oldItem = idToOldRoot[it["id"]]
             it["version"] = if (equalByAmountOfRepliesAndLikes(it, oldItem)) (oldItem!!["version"] as Long) else version
         }
-        openSeaItemInterceptor.addOpenSeaData(newAllItems, ::OpenSeaToFeedAddingVisitor, FeedItemIdExtractor())
+        openSeaItemInterceptor.addOpenSeaData(newAllItems, ::OpenSeaToFeedAddingVisitor, FeedItemIdExtractor)
         repository.cache = Cache(newAllItems, version)
         logger.info("Update cache ${javaClass.simpleName}")
     }
