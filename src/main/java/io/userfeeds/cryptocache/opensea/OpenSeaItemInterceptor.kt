@@ -2,26 +2,25 @@ package io.userfeeds.cryptocache.opensea
 
 import io.reactivex.rxkotlin.toObservable
 import io.userfeeds.cryptocache.ContextItem
-import io.userfeeds.cryptocache.FeedItemDataAdder
 import org.springframework.stereotype.Component
 
 @Component
 class OpenSeaItemInterceptor(private val openSeaFacade: OpenSeaFacade) {
-    fun <T : ContextItem> addOpenSeaData(newAllItems: List<T>, dataAdderCreator: (Map<String, OpenSeaData>) -> OpenSeaDataAdder<T>, itemContextExtractor: ItemContextExtractor<T>) {
-        val openSeaDataByContext: Map<String, OpenSeaData> = getOpenSeaDataByContext(newAllItems, itemContextExtractor)
-        val adder = dataAdderCreator(openSeaDataByContext)
+    fun <T : ContextItem> addOpenSeaData(newAllItems: List<T>, dataAddingVisitorCreator: (Map<String, OpenSeaData>) -> OpenSeaDataAddingVisitor<T>, itemIdExtractor: ItemIdExtractor<T>) {
+        val openSeaDataByContext: Map<String, OpenSeaData> = getOpenSeaDataByContext(newAllItems, itemIdExtractor)
+        val adder = dataAddingVisitorCreator(openSeaDataByContext)
         newAllItems.forEach {
-            adder.addOpenSeaDataToItem(it)
+            adder.visitItem(it)
         }
     }
 
-    private fun <T : ContextItem> extractContexts(newAllItems: List<T>, itemContextExtractor: ItemContextExtractor<T>): List<String> {
-        return newAllItems.flatMap { itemContextExtractor.extractContextsFromItem(it) }.filterNotNull()
+    private fun <T : ContextItem> extractContexts(newAllItems: List<T>, itemIdExtractor: ItemIdExtractor<T>): List<String> {
+        return newAllItems.flatMap { itemIdExtractor.extractContextsFromItem(it) }.filterNotNull()
     }
 
     private fun <T : ContextItem> getOpenSeaDataByContext(newAllItems: List<T>,
-                                                          itemContextExtractor: ItemContextExtractor<T>): Map<String, OpenSeaData> {
-        return extractContexts(newAllItems, itemContextExtractor)
+                                                          itemIdExtractor: ItemIdExtractor<T>): Map<String, OpenSeaData> {
+        return extractContexts(newAllItems, itemIdExtractor)
                 .distinct()
                 .filter { it.startsWith("ethereum:") }
                 .toObservable()
@@ -38,10 +37,10 @@ class OpenSeaItemInterceptor(private val openSeaFacade: OpenSeaFacade) {
     }
 }
 
-interface OpenSeaDataAdder<T> {
-    fun addOpenSeaDataToItem(item: T)
+interface OpenSeaDataAddingVisitor<T> {
+    fun visitItem(item: T)
 }
 
-interface ItemContextExtractor<T> {
+interface ItemIdExtractor<T> {
     fun extractContextsFromItem(item: T): List<String?>
 }

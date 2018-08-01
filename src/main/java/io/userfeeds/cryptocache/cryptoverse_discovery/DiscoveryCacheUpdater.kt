@@ -1,13 +1,12 @@
 package io.userfeeds.cryptocache.cryptoverse_discovery
 
-import io.userfeeds.cryptocache.ContextItemContextExtractor
-import io.userfeeds.cryptocache.ContextdItemDataAdder
+import io.userfeeds.cryptocache.ContextItemIdExtractor
+import io.userfeeds.cryptocache.OpenSeaToContextAddingVisitor
 import io.userfeeds.cryptocache.apiBaseUrl
 import io.userfeeds.cryptocache.cryptoverse_discovery.Type.erc20
 import io.userfeeds.cryptocache.logger
 import io.userfeeds.cryptocache.opensea.OpenSeaItemInterceptor
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import retrofit2.Retrofit
@@ -42,7 +41,7 @@ class DiscoveryCacheUpdater(private val repository: DiscoveryRepository,
         try {
             val name = if (type == erc20) "experimental_author_balance" else "experimental_filter_origin"
             val latest = api.latestPurrers(name, asset).blockingFirst().items
-            openSeaItemInterceptor.addOpenSeaData(latest, ::ContextdItemDataAdder, ContextItemContextExtractor())
+            openSeaItemInterceptor.addOpenSeaData(latest, ::OpenSeaToContextAddingVisitor, ContextItemIdExtractor())
             val twitter = api.socialProfiles("twitter", name, asset).blockingFirst().items
             val facebook = api.socialProfiles("facebook", name, asset).blockingFirst().items
             val instagram = api.socialProfiles("instagram", name, asset).blockingFirst().items

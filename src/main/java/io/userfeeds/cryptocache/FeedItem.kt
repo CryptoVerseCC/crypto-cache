@@ -1,9 +1,9 @@
 package io.userfeeds.cryptocache
 
 import io.userfeeds.cryptocache.opensea.ContextInfoApiModel
-import io.userfeeds.cryptocache.opensea.ItemContextExtractor
+import io.userfeeds.cryptocache.opensea.ItemIdExtractor
 import io.userfeeds.cryptocache.opensea.OpenSeaData
-import io.userfeeds.cryptocache.opensea.OpenSeaDataAdder
+import io.userfeeds.cryptocache.opensea.OpenSeaDataAddingVisitor
 
 typealias FeedItem = MutableMap<String, Any>
 
@@ -15,16 +15,17 @@ val FeedItem.likes
     @Suppress("UNCHECKED_CAST")
     get() = this["likes"] as List<FeedItem>
 
-class FeedItemContextExtractor : ItemContextExtractor<FeedItem> {
+class FeedItemIdExtractor : ItemIdExtractor<FeedItem> {
     override fun extractContextsFromItem(item: FeedItem): List<String> {
         return (listOf(item.context)
                 + item.replies.flatMap { it.likes.map(FeedItem::context) + it.context }
-                + item.likes.map(FeedItem::context)).filterNotNull()
+                + item.likes.map(FeedItem::context))
+                .filterNotNull()
     }
 }
 
-class FeedItemDataAdder(private val openSeaDataByContext: Map<String, OpenSeaData>) : OpenSeaDataAdder<FeedItem> {
-    override fun addOpenSeaDataToItem(item: FeedItem) {
+class OpenSeaToFeedAddingVisitor(private val openSeaDataByContext: Map<String, OpenSeaData>) : OpenSeaDataAddingVisitor<FeedItem> {
+    override fun visitItem(item: FeedItem) {
         openSeaDataByContext[item.context]?.let { it ->
             item["context_info"] = ContextInfoApiModel(it)
             addReplies(item, openSeaDataByContext)

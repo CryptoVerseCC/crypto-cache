@@ -1,7 +1,7 @@
 package io.userfeeds.cryptocache.cryptoverse_magic
 
-import io.userfeeds.cryptocache.FeedItemContextExtractor
-import io.userfeeds.cryptocache.FeedItemDataAdder
+import io.userfeeds.cryptocache.FeedItemIdExtractor
+import io.userfeeds.cryptocache.OpenSeaToFeedAddingVisitor
 import io.userfeeds.cryptocache.apiBaseUrl
 import io.userfeeds.cryptocache.logger
 import io.userfeeds.cryptocache.opensea.OpenSeaItemInterceptor
@@ -32,7 +32,7 @@ class MagicFeedCacheUpdater(private val repository: MagicFeedRepository,
         val oldCache = repository.cache
         val idToOldRoot = oldCache.allItems.associateBy { it["id"] }
         val newAllItems = api.getFeed().blockingFirst().items
-        openSeaItemInterceptor.addOpenSeaData(newAllItems, ::FeedItemDataAdder, FeedItemContextExtractor())
+        openSeaItemInterceptor.addOpenSeaData(newAllItems, ::OpenSeaToFeedAddingVisitor, FeedItemIdExtractor())
         val version = System.currentTimeMillis()
         (listOf(null) + newAllItems).zipWithNext().forEach { (prev, current) ->
             val oldItem = idToOldRoot[current!!["id"]]
