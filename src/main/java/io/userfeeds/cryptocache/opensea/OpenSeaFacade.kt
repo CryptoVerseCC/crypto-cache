@@ -33,7 +33,7 @@ class OpenSeaFacade {
                         OpenSeaData(
                                 backgroundColor = it.backgroundColor,
                                 imageUrl = it.imageUrl,
-                                name = it.assetContract.name,
+                                name = it.name,
                                 owner = it.owner.address
                         )
                     }
