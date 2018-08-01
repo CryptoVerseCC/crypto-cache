@@ -41,19 +41,25 @@ class FeedCacheUpdater(private val repository: FeedRepository) {
         if (oldItem == null) {
             return false
         }
-        if ((newItem["likes"] as List<*>).size != (oldItem["likes"] as List<*>).size) {
+        if (newItem.likes.size != oldItem.likes.size) {
             return false
         }
-        if ((newItem["replies"] as List<*>).size != (oldItem["replies"] as List<*>).size) {
+        if (newItem.replies.size != oldItem.replies.size) {
             return false
         }
-        val idToOldReply = (oldItem["replies"] as List<Map<String, Any>>).associateBy { it["id"] }
-        (newItem["replies"] as List<Map<String, Any>>).forEach {
-            val oldReply = idToOldReply[it["id"]] ?: return false
-            if ((it["likes"] as List<*>).size != (oldReply["likes"] as List<*>).size) {
+        val idToOldReply = (oldItem.replies).associateBy { it["id"] }
+        (newItem.replies).forEach {
+            val oldReply: Map<String, Any> = idToOldReply[it["id"]] ?: return false
+            if (it.likes.size != oldReply.likes.size) {
                 return false
             }
         }
         return true
     }
+
+    private val Map<String, Any>.replies
+        get() = this["replies"] as List<Map<String, Any>>
+
+    private val Map<String, Any>.likes
+        get() = this["likes"] as List<Map<String, Any>>
 }
