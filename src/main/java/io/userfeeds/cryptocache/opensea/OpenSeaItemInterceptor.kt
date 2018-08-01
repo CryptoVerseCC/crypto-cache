@@ -42,5 +42,5 @@ interface OpenSeaDataAddingVisitor<T> {
 }
 
 interface ItemIdExtractor<T> {
-    fun extractContextsFromItem(item: T): List<String?>
+    fun extractContextsFromItem(item: T): List<String>
 }
