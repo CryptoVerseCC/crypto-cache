@@ -13,6 +13,12 @@ class DiscoveryRepository {
             "ethereum:0xdde2d979e8d39bb8416eafcfc1758f3cab2c9c72", // KO
             "ethereum:0xdcaad9fd9a74144d226dbf94ce6162ca9f09ed7e", // Str
             "ethereum:0x4fece400c0d3db0937162ab44bab34445626ecfe", // Town
+            "ethereum:0x71c118b00759b0851785642541ceb0f4ceea0bd5", // Chibi
+            "ethereum:0x87d598064c736dd0c712d329afcfaa0ccc1921a1", // Fighters
+            "ethereum:0xabc7e6c01237e8eef355bba2bf925a730b714d5f", // Saga
+            "ethereum:0xb2c0782ae4a299f7358758b2d15da9bf29e1dd99", // Mons
+            "ethereum:0xc70be5b7c19529ef642d16c10dfe91c58b5c3bf0", // Myeth
+            "ethereum:0x663e4229142a27f00bafb5d087e1e730648314c3", // Panda
             "ethereum:0xfa6f7881e52fdf912c4a285d78a3141b089ce859",
             "ethereum:0x108c05cac356d93b351375434101cfd3e14f7e44",
             "ethereum:0x0f5d2fb29fb7d3cfee444a200298f468908cc942",
