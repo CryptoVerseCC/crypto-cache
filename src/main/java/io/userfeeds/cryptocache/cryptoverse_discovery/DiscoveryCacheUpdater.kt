@@ -1,8 +1,10 @@
 package io.userfeeds.cryptocache.cryptoverse_discovery
 
 import io.userfeeds.cryptocache.apiBaseUrl
+import io.userfeeds.cryptocache.cryptoverse_discovery.Type.erc20
 import io.userfeeds.cryptocache.logger
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import retrofit2.Retrofit
@@ -19,6 +21,7 @@ class DiscoveryCacheUpdater(private val repository: DiscoveryRepository) {
                 .addConverterFactory(MoshiConverterFactory.create())
                 .baseUrl(apiBaseUrl)
                 .client(OkHttpClient.Builder()
+                        .addNetworkInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
                         .readTimeout(60, TimeUnit.SECONDS)
                         .build())
                 .build()
@@ -27,18 +30,19 @@ class DiscoveryCacheUpdater(private val repository: DiscoveryRepository) {
 
     @Scheduled(fixedDelay = 1_000)
     fun updateCache() {
-        val assets = repository.assets.toList()
-        assets.forEach(this::updateForAsset)
+        val assets = repository.assets
+        assets.forEach { (asset, type) -> updateForAsset(asset, type) }
         logger.info("Update cache ${assets.size} ${javaClass.simpleName}")
     }
 
-    fun updateForAsset(asset: String) {
+    fun updateForAsset(asset: String, type: Type) {
         try {
-            val latest = api.latestPurrers(asset).blockingFirst().items
-            val twitter = api.socialProfiles("twitter", asset).blockingFirst().items
-            val facebook = api.socialProfiles("facebook", asset).blockingFirst().items
-            val instagram = api.socialProfiles("instagram", asset).blockingFirst().items
-            val github = api.socialProfiles("github", asset).blockingFirst().items
+            val name = if (type == erc20) "experimental_author_balance" else "experimental_filter_origin"
+            val latest = api.latestPurrers(name, asset).blockingFirst().items
+            val twitter = api.socialProfiles("twitter", name, asset).blockingFirst().items
+            val facebook = api.socialProfiles("facebook", name, asset).blockingFirst().items
+            val instagram = api.socialProfiles("instagram", name, asset).blockingFirst().items
+            val github = api.socialProfiles("github", name, asset).blockingFirst().items
             repository.put(asset, Discovery(latest, twitter, facebook, instagram, github))
             logger.info("Update cache: $asset ${javaClass.simpleName}")
         } catch (exception: Throwable) {

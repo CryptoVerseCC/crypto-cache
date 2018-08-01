@@ -7,9 +7,9 @@ import retrofit2.http.Path
 
 interface DiscoveryApi {
 
-    @GET("experimental_latest_purrers/experimental_author_balance;asset={asset}")
-    fun latestPurrers(@Path("asset") asset: String): Observable<ItemsWrapper>
+    @GET("experimental_latest_purrers/{name};asset={asset}")
+    fun latestPurrers(@Path("name") name: String, @Path("asset") asset: String): Observable<ItemsWrapper>
 
-    @GET("experimental_social_profiles;type={type}/experimental_author_balance;asset={asset}")
-    fun socialProfiles(@Path("type") type: String, @Path("asset") asset: String): Observable<ItemsWrapper>
+    @GET("experimental_social_profiles;type={type}/{name};asset={asset}")
+    fun socialProfiles(@Path("type") type: String, @Path("name") name: String, @Path("asset") asset: String): Observable<ItemsWrapper>
 }
