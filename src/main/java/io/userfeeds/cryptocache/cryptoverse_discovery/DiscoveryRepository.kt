@@ -10,6 +10,9 @@ class DiscoveryRepository {
             "ethereum:0xf7a6e15dfd5cdd9ef12711bd757a9b6021abf643", // Bots
             "ethereum:0xa6d954d08877f8ce1224f6bfb83484c7d3abf8e9", // Moji
             "ethereum:0x323a3e1693e7a0959f65972f3bf2dfcb93239dfe", // DAC
+            "ethereum:0xdde2d979e8d39bb8416eafcfc1758f3cab2c9c72", // KO
+            "ethereum:0xdcaad9fd9a74144d226dbf94ce6162ca9f09ed7e", // Str
+            "ethereum:0x4fece400c0d3db0937162ab44bab34445626ecfe", // Town
             "ethereum:0xfa6f7881e52fdf912c4a285d78a3141b089ce859",
             "ethereum:0x108c05cac356d93b351375434101cfd3e14f7e44",
             "ethereum:0x0f5d2fb29fb7d3cfee444a200298f468908cc942",
