@@ -33,7 +33,7 @@ class OpenSeaFacade {
                         OpenSeaData(
                                 backgroundColor = it.backgroundColor,
                                 imageUrl = it.imageUrl,
-                                name = it.name,
+                                name = it.name ?: "undefined",
                                 owner = it.owner.address
                         )
                     }
