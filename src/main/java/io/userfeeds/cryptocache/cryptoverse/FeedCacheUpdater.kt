@@ -43,7 +43,7 @@ class FeedCacheUpdater(private val repository: FeedRepository,
         logger.info("Update cache ${javaClass.simpleName}")
     }
 
-    private fun getOpenSeaDataByContext(newAllItems: List<MutableMap<String, Any>>): Map<String, OpenSeaData> {
+    private fun getOpenSeaDataByContext(newAllItems: List<DynamicItem>): Map<String, OpenSeaData> {
         return extractContexts(newAllItems)
                 .distinct()
                 .filter { it.startsWith("ethereum:") }
@@ -60,15 +60,15 @@ class FeedCacheUpdater(private val repository: FeedRepository,
                 .toMap()
     }
 
-    private fun extractContexts(newAllItems: List<MutableMap<String, Any>>): List<String> {
+    private fun extractContexts(newAllItems: List<DynamicItem>): List<String> {
         return newAllItems.flatMap { extractContextsFromItem(it) }.filterNotNull()
     }
 
-    private fun extractContextsFromItem(item: MutableMap<String, Any>): List<String?> {
+    private fun extractContextsFromItem(item: DynamicItem): List<String?> {
         return listOf(item.context) + item.replies.flatMap { it.likes.map { it.context } + it.context } + item.likes.map { it.context }
     }
 
-    private fun addOpenSeaData(newAllItems: List<MutableMap<String, Any>>, openSeaDataByContext: Map<String, OpenSeaData>) {
+    private fun addOpenSeaData(newAllItems: List<DynamicItem>, openSeaDataByContext: Map<String, OpenSeaData>) {
         newAllItems.forEach {
             openSeaDataByContext[it.context]?.let { data ->
                 it["context_info"] = ContextInfoApiModel(data)
@@ -78,8 +78,8 @@ class FeedCacheUpdater(private val repository: FeedRepository,
         }
     }
 
-    private fun addReplies(it: MutableMap<String, Any>, openSeaDataByContext: Map<String, OpenSeaData>) {
-        it.replies.forEach { replay ->
+    private fun addReplies(item: DynamicItem, openSeaDataByContext: Map<String, OpenSeaData>) {
+        item.replies.forEach { replay ->
             openSeaDataByContext[replay.context]?.let { data ->
                 replay["context_info"] = ContextInfoApiModel(data)
                 addLikes(replay, openSeaDataByContext)
@@ -87,15 +87,15 @@ class FeedCacheUpdater(private val repository: FeedRepository,
         }
     }
 
-    private fun addLikes(it: MutableMap<String, Any>, openSeaDataByContext: Map<String, OpenSeaData>) {
-        it.likes.forEach { like ->
+    private fun addLikes(item: DynamicItem, openSeaDataByContext: Map<String, OpenSeaData>) {
+        item.likes.forEach { like ->
             openSeaDataByContext[like.context]?.let { data ->
                 like["context_info"] = ContextInfoApiModel(data)
             }
         }
     }
 
-    private fun equalByAmountOfRepliesAndLikes(newItem: MutableMap<String, Any>, oldItem: MutableMap<String, Any>?): Boolean {
+    private fun equalByAmountOfRepliesAndLikes(newItem: DynamicItem, oldItem: DynamicItem?): Boolean {
         if (oldItem == null) {
             return false
         }
@@ -107,7 +107,7 @@ class FeedCacheUpdater(private val repository: FeedRepository,
         }
         val idToOldReply = (oldItem.replies).associateBy { it["id"] }
         (newItem.replies).forEach {
-            val oldReply: Map<String, Any> = idToOldReply[it["id"]] ?: return false
+            val oldReply: DynamicItem = idToOldReply[it["id"]] ?: return false
             if (it.likes.size != oldReply.likes.size) {
                 return false
             }
@@ -115,17 +115,19 @@ class FeedCacheUpdater(private val repository: FeedRepository,
         return true
     }
 
-    private val Map<String, Any>.replies
+    private val DynamicItem.replies
         @Suppress("UNCHECKED_CAST")
-        get() = this["replies"] as List<MutableMap<String, Any>>
+        get() = this["replies"] as List<DynamicItem>
 
-    private val Map<String, Any>.likes
+    private val DynamicItem.likes
         @Suppress("UNCHECKED_CAST")
-        get() = this["likes"] as List<MutableMap<String, Any>>
+        get() = this["likes"] as List<DynamicItem>
 
-    private val Map<String, Any>.context
+    private val DynamicItem.context
         get() = this["context"] as String?
 }
+
+typealias DynamicItem = MutableMap<String, Any>
 
 
 private data class ContextInfoApiModel(
