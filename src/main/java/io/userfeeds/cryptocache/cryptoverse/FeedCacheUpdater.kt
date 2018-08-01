@@ -1,7 +1,7 @@
 package io.userfeeds.cryptocache.cryptoverse
 
 import io.userfeeds.cryptocache.*
-import io.userfeeds.cryptocache.opensea.OpenSeaFeedInterceptor
+import io.userfeeds.cryptocache.opensea.OpenSeaItemInterceptor
 import okhttp3.OkHttpClient
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
 
 @Component
 class FeedCacheUpdater(private val repository: FeedRepository,
-                       private val openSeaFeedInterceptor: OpenSeaFeedInterceptor) {
+                       private val openSeaItemInterceptor: OpenSeaItemInterceptor) {
 
     private val api = Retrofit.Builder()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -34,7 +34,7 @@ class FeedCacheUpdater(private val repository: FeedRepository,
             val oldItem = idToOldRoot[it["id"]]
             it["version"] = if (equalByAmountOfRepliesAndLikes(it, oldItem)) (oldItem!!["version"] as Long) else version
         }
-        openSeaFeedInterceptor.addOpenSeaData(newAllItems)
+        openSeaItemInterceptor.addOpenSeaData(newAllItems, ::FeedItemDataAdder, FeedItemContextExtractor())
         repository.cache = Cache(newAllItems, version)
         logger.info("Update cache ${javaClass.simpleName}")
     }

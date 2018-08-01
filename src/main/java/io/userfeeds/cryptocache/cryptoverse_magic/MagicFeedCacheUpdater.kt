@@ -1,8 +1,10 @@
 package io.userfeeds.cryptocache.cryptoverse_magic
 
+import io.userfeeds.cryptocache.FeedItemContextExtractor
+import io.userfeeds.cryptocache.FeedItemDataAdder
 import io.userfeeds.cryptocache.apiBaseUrl
 import io.userfeeds.cryptocache.logger
-import io.userfeeds.cryptocache.opensea.OpenSeaFeedInterceptor
+import io.userfeeds.cryptocache.opensea.OpenSeaItemInterceptor
 import okhttp3.OkHttpClient
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
@@ -13,7 +15,7 @@ import java.util.concurrent.TimeUnit
 
 @Component
 class MagicFeedCacheUpdater(private val repository: MagicFeedRepository,
-                            private val openSeaFeedInterceptor: OpenSeaFeedInterceptor) {
+                            private val openSeaItemInterceptor: OpenSeaItemInterceptor) {
 
     private val api = Retrofit.Builder()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -30,7 +32,7 @@ class MagicFeedCacheUpdater(private val repository: MagicFeedRepository,
         val oldCache = repository.cache
         val idToOldRoot = oldCache.allItems.associateBy { it["id"] }
         val newAllItems = api.getFeed().blockingFirst().items
-        openSeaFeedInterceptor.addOpenSeaData(newAllItems)
+        openSeaItemInterceptor.addOpenSeaData(newAllItems, ::FeedItemDataAdder, FeedItemContextExtractor())
         val version = System.currentTimeMillis()
         (listOf(null) + newAllItems).zipWithNext().forEach { (prev, current) ->
             val oldItem = idToOldRoot[current!!["id"]]
