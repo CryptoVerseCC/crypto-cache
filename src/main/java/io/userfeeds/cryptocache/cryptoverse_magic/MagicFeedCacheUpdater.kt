@@ -1,9 +1,6 @@
 package io.userfeeds.cryptocache.cryptoverse_magic
 
-import io.userfeeds.cryptocache.FeedItemIdExtractor
-import io.userfeeds.cryptocache.OpenSeaToFeedAddingVisitor
-import io.userfeeds.cryptocache.apiBaseUrl
-import io.userfeeds.cryptocache.logger
+import io.userfeeds.cryptocache.*
 import io.userfeeds.cryptocache.opensea.OpenSeaItemInterceptor
 import okhttp3.OkHttpClient
 import org.springframework.scheduling.annotation.Scheduled
@@ -43,20 +40,20 @@ class MagicFeedCacheUpdater(private val repository: MagicFeedRepository,
         logger.info("Update cache ${javaClass.simpleName}")
     }
 
-    private fun equalByAmountOfRepliesAndLikes(newItem: MutableMap<String, Any>, oldItem: MutableMap<String, Any>?): Boolean {
+    private fun equalByAmountOfRepliesAndLikes(newItem: FeedItem, oldItem: FeedItem?): Boolean {
         if (oldItem == null) {
             return false
         }
-        if ((newItem["likes"] as List<*>).size != (oldItem["likes"] as List<*>).size) {
+        if (newItem.likes.size != oldItem.likes.size) {
             return false
         }
-        if ((newItem["replies"] as List<*>).size != (oldItem["replies"] as List<*>).size) {
+        if (newItem.replies.size != oldItem.replies.size) {
             return false
         }
-        val idToOldReply = (oldItem["replies"] as List<Map<String, Any>>).associateBy { it["id"] }
-        (newItem["replies"] as List<Map<String, Any>>).forEach {
+        val idToOldReply = oldItem.replies.associateBy { it["id"] }
+        newItem.replies.forEach {
             val oldReply = idToOldReply[it["id"]] ?: return false
-            if ((it["likes"] as List<*>).size != (oldReply["likes"] as List<*>).size) {
+            if (it.likes.size != oldReply.likes.size) {
                 return false
             }
         }
