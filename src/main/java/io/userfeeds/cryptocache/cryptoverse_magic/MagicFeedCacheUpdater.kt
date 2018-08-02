@@ -2,27 +2,14 @@ package io.userfeeds.cryptocache.cryptoverse_magic
 
 import io.userfeeds.cryptocache.*
 import io.userfeeds.cryptocache.opensea.OpenSeaItemInterceptor
-import okhttp3.OkHttpClient
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.moshi.MoshiConverterFactory
-import java.util.concurrent.TimeUnit
 
 @Component
 class MagicFeedCacheUpdater(private val repository: MagicFeedRepository,
                             private val openSeaItemInterceptor: OpenSeaItemInterceptor) {
 
-    private val api = Retrofit.Builder()
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(MoshiConverterFactory.create())
-            .baseUrl(apiBaseUrl)
-            .client(OkHttpClient.Builder()
-                    .readTimeout(60, TimeUnit.SECONDS)
-                    .build())
-            .build()
-            .create(MagicFeedApi::class.java)
+    private val api = apiRetrofit().create(MagicFeedApi::class.java)
 
     @Scheduled(fixedDelay = 1_000)
     fun updateCache() {

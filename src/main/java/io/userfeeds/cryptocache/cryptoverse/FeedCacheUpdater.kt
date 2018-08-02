@@ -2,27 +2,14 @@ package io.userfeeds.cryptocache.cryptoverse
 
 import io.userfeeds.cryptocache.*
 import io.userfeeds.cryptocache.opensea.OpenSeaItemInterceptor
-import okhttp3.OkHttpClient
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.moshi.MoshiConverterFactory
-import java.util.concurrent.TimeUnit
 
 @Component
 class FeedCacheUpdater(private val repository: FeedRepository,
                        private val openSeaItemInterceptor: OpenSeaItemInterceptor) {
 
-    private val api = Retrofit.Builder()
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(MoshiConverterFactory.create())
-            .baseUrl(apiBaseUrl)
-            .client(OkHttpClient.Builder()
-                    .readTimeout(60, TimeUnit.SECONDS)
-                    .build())
-            .build()
-            .create(FeedApi::class.java)
+    private val api = apiRetrofit().create(FeedApi::class.java)
 
     @Scheduled(fixedDelay = 1_000)
     fun updateCache() {

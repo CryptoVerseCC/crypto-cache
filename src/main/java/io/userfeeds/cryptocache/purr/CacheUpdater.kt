@@ -1,27 +1,14 @@
 package io.userfeeds.cryptocache.purr
 
-import io.userfeeds.cryptocache.apiBaseUrl
+import io.userfeeds.cryptocache.apiRetrofit
 import io.userfeeds.cryptocache.logger
-import okhttp3.OkHttpClient
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.moshi.MoshiConverterFactory
-import java.util.concurrent.TimeUnit
 
 @Component
 class CacheUpdater(private val store: Store) {
 
-    private val api = Retrofit.Builder()
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(MoshiConverterFactory.create())
-            .baseUrl(apiBaseUrl)
-            .client(OkHttpClient.Builder()
-                    .readTimeout(60, TimeUnit.SECONDS)
-                    .build())
-            .build()
-            .create(CryptoPurrApi::class.java)
+    private val api = apiRetrofit().create(CryptoPurrApi::class.java)
 
     @Scheduled(fixedDelay = 1_000)
     fun updateCache() {

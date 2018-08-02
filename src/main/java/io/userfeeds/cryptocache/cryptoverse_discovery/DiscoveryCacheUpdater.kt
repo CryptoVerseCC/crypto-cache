@@ -2,32 +2,19 @@ package io.userfeeds.cryptocache.cryptoverse_discovery
 
 import io.userfeeds.cryptocache.ContextItemIdExtractor
 import io.userfeeds.cryptocache.OpenSeaToContextAddingVisitor
-import io.userfeeds.cryptocache.apiBaseUrl
+import io.userfeeds.cryptocache.apiRetrofit
 import io.userfeeds.cryptocache.cryptoverse_discovery.Type.erc20
 import io.userfeeds.cryptocache.logger
 import io.userfeeds.cryptocache.opensea.OpenSeaItemInterceptor
-import okhttp3.OkHttpClient
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.moshi.MoshiConverterFactory
-import java.util.concurrent.TimeUnit
 
 @Component
 class DiscoveryCacheUpdater(private val repository: DiscoveryRepository,
                             private val openSeaItemInterceptor: OpenSeaItemInterceptor) {
 
     private val api by lazy {
-        Retrofit.Builder()
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(MoshiConverterFactory.create())
-                .baseUrl(apiBaseUrl)
-                .client(OkHttpClient.Builder()
-                        .readTimeout(60, TimeUnit.SECONDS)
-                        .build())
-                .build()
-                .create(DiscoveryApi::class.java)
+        apiRetrofit().create(DiscoveryApi::class.java)
     }
 
     @Scheduled(fixedDelay = 1_000)
