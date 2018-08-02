@@ -28,17 +28,17 @@ class OpenSeaToFeedAddingVisitor(private val openSeaDataByContext: Map<String, O
     override fun visitItem(item: FeedItem) {
         openSeaDataByContext[item.context]?.let { it ->
             item["context_info"] = ContextInfoApiModel(it)
-            addReplies(item, openSeaDataByContext)
-            addLikes(item, openSeaDataByContext)
         }
+        addReplies(item, openSeaDataByContext)
+        addLikes(item, openSeaDataByContext)
     }
 
     private fun addReplies(item: FeedItem, openSeaDataByContext: Map<String, OpenSeaData>) {
         item.replies.forEach { replay ->
             openSeaDataByContext[replay.context]?.let { data ->
                 replay["context_info"] = ContextInfoApiModel(data)
-                addLikes(replay, openSeaDataByContext)
             }
+            addLikes(replay, openSeaDataByContext)
         }
     }
 
