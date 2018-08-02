@@ -45,7 +45,7 @@ class OpenSeaFacade(private val openSeaRepository: OpenSeaRepository) {
                             asset = asset.toString(),
                             backgroundColor = it.backgroundColor,
                             imageUrl = it.imageUrl,
-                            name = it.name ?: "undefined"
+                            name = it.name
                     )
                 }
                 .doOnNext {

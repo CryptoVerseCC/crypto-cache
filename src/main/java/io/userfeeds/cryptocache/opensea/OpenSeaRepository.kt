@@ -12,5 +12,5 @@ data class OpenSeaData(
         val asset: String,
         val backgroundColor: String?,
         val imageUrl: String,
-        val name: String
+        val name: String?
 )
