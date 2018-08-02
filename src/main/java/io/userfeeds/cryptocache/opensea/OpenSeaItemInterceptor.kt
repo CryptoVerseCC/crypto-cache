@@ -7,7 +7,9 @@ import org.springframework.stereotype.Component
 @Component
 class OpenSeaItemInterceptor(private val openSeaFacade: OpenSeaFacade) {
 
-    fun <T : ContextItem> addOpenSeaData(newAllItems: List<T>, dataAddingVisitorCreator: (Map<String, OpenSeaData>) -> OpenSeaDataAddingVisitor<T>, itemIdExtractor: ItemIdExtractor<T>) {
+    fun <T : ContextItem> addOpenSeaData(newAllItems: List<T>,
+                                         dataAddingVisitorCreator: (Map<String, OpenSeaData>) -> OpenSeaDataAddingVisitor<T>,
+                                         itemIdExtractor: ItemIdExtractor<T>) {
         val openSeaDataByContext: Map<String, OpenSeaData> = getOpenSeaDataByContext(newAllItems, itemIdExtractor)
         val adder = dataAddingVisitorCreator(openSeaDataByContext)
         newAllItems.forEach {
