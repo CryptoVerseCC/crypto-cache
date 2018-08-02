@@ -8,11 +8,12 @@ import org.springframework.stereotype.Component
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.Executors
 
 @Component
-class OpenSeaFacade {
+class OpenSeaFacade(private val openSeaRepository: OpenSeaRepository) {
 
     private val cache = ConcurrentHashMap<Asset, Observable<OpenSeaData>>()
     private val api = Retrofit.Builder()
@@ -28,17 +29,30 @@ class OpenSeaFacade {
                 .split(":")
                 .let { (address, token) -> address to token }
         return cache.getOrPut(asset) {
-            api.asset(asset.address, asset.token)
-                    .map {
-                        OpenSeaData(
-                                backgroundColor = it.backgroundColor,
-                                imageUrl = it.imageUrl,
-                                name = it.name ?: "undefined",
-                                owner = it.owner.address
-                        )
-                    }
-                    .doOnNext { cache[asset] = Observable.just(it) }
+            getAssetFromPersistentCache(asset).orElse(getAssetFromApi(asset))
         }
+    }
+
+    private fun getAssetFromPersistentCache(asset: Asset): Optional<Observable<OpenSeaData>> {
+        return openSeaRepository.findById(asset.toString())
+                .map { Observable.just(it) }
+    }
+
+    private fun getAssetFromApi(asset: Asset): Observable<OpenSeaData> {
+        return api.asset(asset.address, asset.token)
+                .map {
+                    OpenSeaData(
+                            asset = asset.toString(),
+                            backgroundColor = it.backgroundColor,
+                            imageUrl = it.imageUrl,
+                            name = it.name ?: "undefined"
+                    )
+                }
+                .doOnNext {
+                    cache[asset] = Observable.just(it)
+                    openSeaRepository.save(it)
+                }
+                .share()
     }
 }
 
@@ -49,10 +63,3 @@ val Asset.address
 
 val Asset.token
     get() = this.second
-
-data class OpenSeaData(
-        val backgroundColor: String?,
-        val owner: String,
-        val imageUrl: String,
-        val name: String
-)

@@ -14,9 +14,7 @@ interface OpenSeaApi {
 
     data class OpenSeaAsset(@Json(name = "background_color") val backgroundColor: String?,
                             @Json(name = "name") val name: String?,
-                            @Json(name = "owner") val owner: OpenSeaAssetOwner,
                             @Json(name = "image_url") val imageUrl: String)
 
-    data class OpenSeaAssetOwner(val address: String)
 }
 
