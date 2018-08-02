@@ -21,7 +21,6 @@ class DiscoveryCacheUpdater(private val repository: DiscoveryRepository) {
                 .addConverterFactory(MoshiConverterFactory.create())
                 .baseUrl(apiBaseUrl)
                 .client(OkHttpClient.Builder()
-                        .addNetworkInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
                         .readTimeout(60, TimeUnit.SECONDS)
                         .build())
                 .build()
