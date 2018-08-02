@@ -19,26 +19,15 @@ class DecorateWithOpenSeaController(private val openSeaItemInterceptor: OpenSeaI
     @PostMapping("/decorate_with_open_sea")
     fun addOpenSea(@RequestBody flow: MutableMap<String, Any>): MutableMap<String, Any> {
         return api.ranking(flow).blockingGet().also { response ->
-            openSeaItemInterceptor.addOpenSeaData(response.getItemss(), ::Visitor, Extractor)
-        }
-    }
-    class Visitor(private val openSeaDataByContext: Map<String, OpenSeaData>) : OpenSeaDataAddingVisitor<MutableMap<String, Any>> {
-        override fun visitItem(item: MutableMap<String, Any>) {
-            addContextInfo(item)
-            item.getLikess().forEach(this::addContextInfo)
-            item.getRepliess().forEach(this::visitItem)
-        }
-
-        private fun addContextInfo(item: MutableMap<String, Any>) {
-            openSeaDataByContext[item.context]?.let { it ->
-                item["context_info"] = ContextInfoApiModel(it)
-            }
+            openSeaItemInterceptor.addOpenSeaData(response.getItemss(), Visitor)
         }
     }
 
-    object Extractor : ItemIdExtractor<MutableMap<String, Any>> {
-        override fun extractContextsFromItem(item: MutableMap<String, Any>): List<String> {
-            return (listOf(item.getContext()) + item.getLikess().map { it.getContext() } + item.getRepliess().flatMap { extractContextsFromItem(it) }).filterNotNull()
+    private object Visitor : OpenSeaItemInterceptor.Visitor<MutableMap<String, Any>> {
+        override fun visit(item: MutableMap<String, Any>, f: (MutableMap<String, Any>) -> Unit) {
+            f(item)
+            item.getLikess().forEach(f)
+            item.getRepliess().forEach { visit(item, f) }
         }
     }
 
@@ -48,8 +37,6 @@ class DecorateWithOpenSeaController(private val openSeaItemInterceptor: OpenSeaI
     }
 
     private companion object {
-        @Suppress("UNCHECKED_CAST")
-        private fun MutableMap<String, Any>.getContext() = this["context"] as? String
 
         @Suppress("UNCHECKED_CAST")
         private fun MutableMap<String, Any>.getItemss() = this["items"] as? List<MutableMap<String, Any>> ?: emptyList()

@@ -1,25 +1,13 @@
 package io.userfeeds.cryptocache
 
-import io.userfeeds.cryptocache.opensea.ContextInfoApiModel
-import io.userfeeds.cryptocache.opensea.ItemIdExtractor
-import io.userfeeds.cryptocache.opensea.OpenSeaData
-import io.userfeeds.cryptocache.opensea.OpenSeaDataAddingVisitor
+import io.userfeeds.cryptocache.opensea.OpenSeaItemInterceptor
+
 
 typealias ContextItem = MutableMap<String, Any>
 
 val ContextItem.context
     get() = this["context"] as String?
 
-object ContextItemIdExtractor : ItemIdExtractor<ContextItem> {
-    override fun extractContextsFromItem(item: ContextItem): List<String> {
-        return listOfNotNull(item.context)
-    }
-}
-
-class OpenSeaToContextAddingVisitor(private val openSeaDataByContext: Map<String, OpenSeaData>) : OpenSeaDataAddingVisitor<ContextItem> {
-    override fun visitItem(item: ContextItem) {
-        openSeaDataByContext[item.context]?.let { it ->
-            item["context_info"] = ContextInfoApiModel(it)
-        }
-    }
+object ContextItemVisitor : OpenSeaItemInterceptor.Visitor<ContextItem> {
+    override fun visit(item: ContextItem, f: (ContextItem) -> Unit) = f(item)
 }
