@@ -32,6 +32,8 @@ class DiscoveryRepository {
             "ethereum:0x0f5d2fb29fb7d3cfee444a200298f468908cc942" to erc20,
             "ethereum:0x89205a3a3b2a69de6dbf7f01ed13b2108b2c43e7" to erc20,
             "ethereum:0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2" to erc20,
+            "ethereum:0xc5fdd3e4665b5d7bc4dc9102622d7cb0fe510b65" to erc20, // Sanmari
+            "ethereum:0x97d392337cc92564085ac51b99178a371c8bdcf3" to erc20, // Kiyosalo
             "ethereum:0xc93058ca0cc2330b847c001c835fc926fedf5a07" to erc20 // %
     )
 
