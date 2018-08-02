@@ -1,16 +1,24 @@
 package io.userfeeds.cryptocache.opensea
 
 import org.springframework.data.jpa.repository.JpaRepository
+import java.io.Serializable
+import javax.persistence.Embeddable
+import javax.persistence.EmbeddedId
 import javax.persistence.Entity
-import javax.persistence.Id
 
-interface OpenSeaRepository : JpaRepository<OpenSeaData, String>
+interface OpenSeaRepository : JpaRepository<OpenSeaData, Asset>
 
 @Entity
 data class OpenSeaData(
-        @Id
-        val asset: String,
+        @EmbeddedId
+        val asset: Asset,
         val backgroundColor: String?,
         val imageUrl: String,
         val name: String?
 )
+
+@Embeddable
+data class Asset(
+        val address: String,
+        val token: String
+) : Serializable
