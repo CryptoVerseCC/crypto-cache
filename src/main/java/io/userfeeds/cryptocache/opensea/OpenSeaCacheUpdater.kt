@@ -19,14 +19,7 @@ class OpenSeaCacheUpdater(
                 .buffer(25)
                 .concatMap {
                     it.toObservable().flatMap { asset ->
-                        service.asset(asset.address, asset.token).map {
-                            OpenSeaData(
-                                    asset = asset,
-                                    backgroundColor = it.backgroundColor,
-                                    imageUrl = it.imageUrl,
-                                    name = it.name
-                            )
-                        }
+                        service.data(asset)
                     }
                 }
                 .toList()

@@ -9,12 +9,12 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
 
 @SpringBootApplication
 @EnableScheduling
-class CrypotCacheApp {
+class CryptoCacheApp {
 
     @Bean
     fun taskScheduler(): TaskScheduler = ThreadPoolTaskScheduler().apply { poolSize = 8 }
 }
 
 fun main(args: Array<String>) {
-    runApplication<CrypotCacheApp>(*args)
+    runApplication<CryptoCacheApp>(*args)
 }

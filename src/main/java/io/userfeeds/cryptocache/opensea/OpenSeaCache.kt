@@ -28,15 +28,7 @@ class OpenSeaCache(
     }
 
     private fun getAssetFromApi(asset: Asset): Observable<OpenSeaData> {
-        return service.asset(asset.address, asset.token)
-                .map {
-                    OpenSeaData(
-                            asset = asset,
-                            backgroundColor = it.backgroundColor,
-                            imageUrl = it.imageUrl,
-                            name = it.name
-                    )
-                }
+        return service.data(asset)
                 .doOnNext {
                     cache[asset] = Observable.just(it)
                     openSeaRepository.save(it)

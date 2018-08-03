@@ -13,6 +13,7 @@ data class OpenSeaData(
         @EmbeddedId
         val asset: Asset,
         val backgroundColor: String?,
+        val externalLink: String,
         val imageUrl: String,
         val name: String?
 )

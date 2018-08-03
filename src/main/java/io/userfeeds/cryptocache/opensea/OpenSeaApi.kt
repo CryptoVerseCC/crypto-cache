@@ -12,11 +12,10 @@ interface OpenSeaApi {
             @Path("address") address: String,
             @Path("token") token: String): Observable<OpenSeaAsset>
 
-
     data class OpenSeaAsset(
             @Json(name = "background_color") val backgroundColor: String?,
+            @Json(name = "external_link") val externalLink: String?,
             @Json(name = "name") val name: String?,
             @Json(name = "image_url") val imageUrl: String)
-
 }
 
