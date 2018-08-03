@@ -11,7 +11,7 @@ class MagicFeedCacheUpdater(private val repository: MagicFeedRepository,
 
     private val api = apiRetrofit().create(MagicFeedApi::class.java)
 
-    @Scheduled(fixedDelay = 1_000)
+    //@Scheduled(fixedDelay = 1_000)
     fun updateCache() {
         val oldCache = repository.cache
         val idToOldRoot = oldCache.allItems.associateBy { it["id"] }

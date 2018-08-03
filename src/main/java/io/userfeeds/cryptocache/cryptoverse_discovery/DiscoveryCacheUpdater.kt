@@ -16,7 +16,7 @@ class DiscoveryCacheUpdater(private val repository: DiscoveryRepository,
         apiRetrofit().create(DiscoveryApi::class.java)
     }
 
-    @Scheduled(fixedDelay = 1_000)
+    //@Scheduled(fixedDelay = 1_000)
     fun updateCache() {
         val assets = repository.assets
         assets.forEach { (asset, type) -> updateForAsset(asset, type) }
