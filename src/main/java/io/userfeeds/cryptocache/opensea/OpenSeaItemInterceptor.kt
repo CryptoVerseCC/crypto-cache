@@ -8,8 +8,9 @@ import org.springframework.stereotype.Component
 @Component
 class OpenSeaItemInterceptor(private val openSeaCache: OpenSeaCache) {
 
-    fun <T : ContextItem> addOpenSeaData(newAllItems: List<T>,
-                                         visitor: Visitor<T>) {
+    fun <T : ContextItem> addOpenSeaData(
+            newAllItems: List<T>,
+            visitor: Visitor<T>) {
         val ids = extractIds(newAllItems, visitor)
         val openSeaDataById = getOpenSeaDataByContext(ids)
         addContextInfo(newAllItems, visitor, openSeaDataById)
@@ -21,9 +22,10 @@ class OpenSeaItemInterceptor(private val openSeaCache: OpenSeaCache) {
         return ids
     }
 
-    private fun <T : ContextItem> addContextInfo(newAllItems: List<T>,
-                                                 visitor: Visitor<T>,
-                                                 openSeaDataByContext: Map<String, OpenSeaData>): List<String> {
+    private fun <T : ContextItem> addContextInfo(
+            newAllItems: List<T>,
+            visitor: Visitor<T>,
+            openSeaDataByContext: Map<String, OpenSeaData>): List<String> {
         val ids = mutableListOf<String>()
         newAllItems.forEach {
             visitor.visit(it) { item ->

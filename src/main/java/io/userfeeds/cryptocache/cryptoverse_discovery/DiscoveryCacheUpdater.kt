@@ -27,11 +27,15 @@ class DiscoveryCacheUpdater(private val repository: DiscoveryRepository,
         try {
             val name = if (type == erc20) "experimental_author_balance" else "experimental_filter_origin"
             val latest = api.latestPurrers(name, asset).blockingFirst().items
-            openSeaItemInterceptor.addOpenSeaData(latest, ContextItemVisitor)
             val twitter = api.socialProfiles("twitter", name, asset).blockingFirst().items
             val facebook = api.socialProfiles("facebook", name, asset).blockingFirst().items
             val instagram = api.socialProfiles("instagram", name, asset).blockingFirst().items
             val github = api.socialProfiles("github", name, asset).blockingFirst().items
+            openSeaItemInterceptor.addOpenSeaData(latest, ContextItemVisitor)
+            openSeaItemInterceptor.addOpenSeaData(twitter, ContextItemVisitor)
+            openSeaItemInterceptor.addOpenSeaData(facebook, ContextItemVisitor)
+            openSeaItemInterceptor.addOpenSeaData(instagram, ContextItemVisitor)
+            openSeaItemInterceptor.addOpenSeaData(github, ContextItemVisitor)
             repository.put(asset, Discovery(latest, twitter, facebook, instagram, github))
             logger.info("Update cache: $asset ${javaClass.simpleName}")
         } catch (exception: Throwable) {
