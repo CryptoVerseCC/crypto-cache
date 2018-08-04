@@ -20,7 +20,7 @@ class AutoRetrofitInterfaceScanner : ImportBeanDefinitionRegistrar, EnvironmentA
     override fun registerBeanDefinitions(metadata: AnnotationMetadata, registry: BeanDefinitionRegistry) {
         val annotationAttributes = metadata.getAnnotationAttributes(EnableAutoRetrofit::class.java.canonicalName)
         if (annotationAttributes != null) {
-            val basePackages = determineBasePackage(annotationAttributes, metadata)
+            val basePackages = getBasePackageFromAnnotatedClass(metadata)
             val provider = createComponentProvider()
             provider.addIncludeFilter(AnnotationTypeFilter(AutoRetrofit::class.java))
             registerBeans(basePackages, provider, registry)
@@ -44,15 +44,6 @@ class AutoRetrofitInterfaceScanner : ImportBeanDefinitionRegistrar, EnvironmentA
         }
     }
 
-    private fun determineBasePackage(annotationAttributes: MutableMap<String, Any>, metadata: AnnotationMetadata) =
-            getBasePackageValueFromAnnotation(annotationAttributes)
-                    ?: getBasePackageFromAnnotatedClass(metadata)
-
     private fun getBasePackageFromAnnotatedClass(metadata: AnnotationMetadata) =
             arrayOf((metadata as StandardAnnotationMetadata).introspectedClass.getPackage().name)
-
-    private fun getBasePackageValueFromAnnotation(annotationAttributes: MutableMap<String, Any>) =
-            @Suppress("UNCHECKED_CAST")
-            (annotationAttributes["value"] as Array<String>).takeIf { it.isNotEmpty() }
-
 }

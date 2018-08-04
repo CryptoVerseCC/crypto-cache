@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit
 
 @SpringBootApplication
 @EnableScheduling
-@EnableAutoRetrofit(value = ["io.userfeeds"])
+@EnableAutoRetrofit
 class CryptoCacheApp {
 
     @Bean
