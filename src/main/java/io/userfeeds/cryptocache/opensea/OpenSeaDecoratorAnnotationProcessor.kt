@@ -9,6 +9,7 @@ import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
 import java.lang.reflect.Proxy.newProxyInstance
 import kotlin.reflect.full.createInstance
+import kotlin.reflect.jvm.isAccessible
 
 class OpenSeaDecoratorAnnotationProcessor(
         private val openSeaItemInterceptor: OpenSeaItemInterceptor
@@ -18,6 +19,7 @@ class OpenSeaDecoratorAnnotationProcessor(
         val openSeaDecorator = AnnotationUtils.findAnnotation(bean.javaClass, OpenSeaDecorator::class.java)
         if (openSeaDecorator != null) {
             @Suppress("UNCHECKED_CAST")
+            openSeaDecorator.visitorClass.constructors.forEach { it.isAccessible = true }
             val visitor = openSeaDecorator.visitorClass.createInstance() as OpenSeaItemInterceptor.Visitor<ContextItem>
             return newProxyInstance(bean.javaClass.classLoader, bean.javaClass.interfaces, DecoratingWithOpenSeaMethodInterceptor(openSeaItemInterceptor, visitor, bean))
         }
@@ -34,10 +36,10 @@ class OpenSeaDecoratorAnnotationProcessor(
 
         private fun callOriginalMethod(method: Method, args: Array<out Any>?): Observable<ItemsWrapper> {
             @Suppress("UNCHECKED_CAST")
-            return if (method.parameterCount == 0)
+            return if (args == null)
                 method.invoke(original)
             else {
-                method.invoke(original, args)
+                method.invoke(original, *args)
             } as Observable<ItemsWrapper>
         }
     }

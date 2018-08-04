@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController
 class OpenSeaCacheInvalidationController(private val openSeaCacheUpdater: OpenSeaCacheUpdater) {
 
     @RequestMapping("/invalidate_opensea_cache")
-    fun invalidateCache(){
+    fun invalidateCache() {
         openSeaCacheUpdater.updateCache()
     }
 }

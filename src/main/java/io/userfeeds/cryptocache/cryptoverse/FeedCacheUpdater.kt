@@ -1,13 +1,14 @@
 package io.userfeeds.cryptocache.cryptoverse
 
-import io.userfeeds.cryptocache.*
-import io.userfeeds.cryptocache.opensea.OpenSeaItemInterceptor
+import io.userfeeds.cryptocache.FeedItem
+import io.userfeeds.cryptocache.likes
+import io.userfeeds.cryptocache.logger
+import io.userfeeds.cryptocache.replies
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 
 @Component
 class FeedCacheUpdater(private val repository: FeedRepository,
-                       private val openSeaItemInterceptor: OpenSeaItemInterceptor,
                        private val api: FeedApi) {
 
     @Scheduled(fixedDelay = 1_000)
@@ -20,7 +21,6 @@ class FeedCacheUpdater(private val repository: FeedRepository,
             val oldItem = idToOldRoot[it["id"]]
             it["version"] = if (equalByAmountOfRepliesAndLikes(it, oldItem)) (oldItem!!["version"] as Long) else version
         }
-        openSeaItemInterceptor.addOpenSeaData(newAllItems, FeedItemVisitor())
         repository.cache = Cache(newAllItems, version)
         logger.info("Update cache ${javaClass.simpleName}")
     }

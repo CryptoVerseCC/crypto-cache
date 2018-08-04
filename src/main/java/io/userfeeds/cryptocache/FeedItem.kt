@@ -1,6 +1,6 @@
 package io.userfeeds.cryptocache
 
-import io.userfeeds.cryptocache.opensea.*
+import io.userfeeds.cryptocache.opensea.OpenSeaItemInterceptor
 
 typealias FeedItem = MutableMap<String, Any>
 

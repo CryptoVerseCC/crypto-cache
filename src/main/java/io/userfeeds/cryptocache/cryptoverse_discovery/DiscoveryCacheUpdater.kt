@@ -1,21 +1,15 @@
 package io.userfeeds.cryptocache.cryptoverse_discovery
 
-import io.userfeeds.cryptocache.ContextItemVisitor
-import io.userfeeds.cryptocache.apiRetrofit
 import io.userfeeds.cryptocache.cryptoverse_discovery.Type.erc20
 import io.userfeeds.cryptocache.logger
-import io.userfeeds.cryptocache.opensea.OpenSeaItemInterceptor
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 
 @Component
 class DiscoveryCacheUpdater(private val repository: DiscoveryRepository,
-                            private val openSeaItemInterceptor: OpenSeaItemInterceptor) {
+                            private val api: DiscoveryApi) {
 
-    private val api by lazy {
-        apiRetrofit().create(DiscoveryApi::class.java)
-    }
-
-    //@Scheduled(fixedDelay = 1_000)
+    @Scheduled(fixedDelay = 1_000)
     fun updateCache() {
         val assets = repository.assets
         assets.forEach { (asset, type) -> updateForAsset(asset, type) }
@@ -30,11 +24,6 @@ class DiscoveryCacheUpdater(private val repository: DiscoveryRepository,
             val facebook = api.socialProfiles("facebook", name, asset).blockingFirst().items
             val instagram = api.socialProfiles("instagram", name, asset).blockingFirst().items
             val github = api.socialProfiles("github", name, asset).blockingFirst().items
-            openSeaItemInterceptor.addOpenSeaData(latest, ContextItemVisitor())
-            openSeaItemInterceptor.addOpenSeaData(twitter, ContextItemVisitor())
-            openSeaItemInterceptor.addOpenSeaData(facebook, ContextItemVisitor())
-            openSeaItemInterceptor.addOpenSeaData(instagram, ContextItemVisitor())
-            openSeaItemInterceptor.addOpenSeaData(github, ContextItemVisitor())
             repository.put(asset, Discovery(latest, twitter, facebook, instagram, github))
             logger.info("Update cache: $asset ${javaClass.simpleName}")
         } catch (exception: Throwable) {

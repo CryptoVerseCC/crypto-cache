@@ -1,6 +1,5 @@
 package io.userfeeds.cryptocache.cryptoverse_discovery
 
-import io.userfeeds.cryptocache.ItemsWrapper
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController

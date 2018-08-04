@@ -1,7 +1,7 @@
 package io.userfeeds.cryptocache.opensea
 
 import io.reactivex.Single
-import io.userfeeds.cryptocache.apiRetrofit
+import io.userfeeds.cryptocache.retrofit.AutoRetrofit
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
@@ -9,20 +9,15 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 @RestController
-class DecorateWithOpenSeaController(private val openSeaItemInterceptor: OpenSeaItemInterceptor) {
-
-    private val api by lazy {
-        apiRetrofit().create(RankingApi::class.java)
-    }
+class DecorateWithOpenSeaController(private val openSeaItemInterceptor: OpenSeaItemInterceptor,
+                                    private val api: RankingApi) {
 
     @PostMapping("/decorate_with_open_sea")
     fun addOpenSea(@RequestBody flow: MutableMap<String, Any>): MutableMap<String, Any> {
-        return api.ranking(flow).blockingGet().also { response ->
-            openSeaItemInterceptor.addOpenSeaData(response.items, Visitor)
-        }
+        return api.ranking(flow).blockingGet()
     }
 
-    private object Visitor : OpenSeaItemInterceptor.Visitor<MutableMap<String, Any>> {
+    private class Visitor : OpenSeaItemInterceptor.Visitor<MutableMap<String, Any>> {
 
         override fun visit(item: MutableMap<String, Any>, accept: (MutableMap<String, Any>) -> Unit) {
             accept(item)
@@ -31,6 +26,8 @@ class DecorateWithOpenSeaController(private val openSeaItemInterceptor: OpenSeaI
         }
     }
 
+    @AutoRetrofit
+    @OpenSeaDecorator(Visitor::class)
     interface RankingApi {
 
         @POST("/ranking")

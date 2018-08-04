@@ -1,7 +1,6 @@
 package io.userfeeds.cryptocache.opensea
 
 import io.reactivex.rxkotlin.toObservable
-import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 
 @Component

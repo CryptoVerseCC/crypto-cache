@@ -1,21 +1,21 @@
 package io.userfeeds.cryptocache.cryptoverse_magic
 
-import io.userfeeds.cryptocache.*
-import io.userfeeds.cryptocache.opensea.OpenSeaItemInterceptor
+import io.userfeeds.cryptocache.FeedItem
+import io.userfeeds.cryptocache.likes
+import io.userfeeds.cryptocache.logger
+import io.userfeeds.cryptocache.replies
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 
 @Component
 class MagicFeedCacheUpdater(private val repository: MagicFeedRepository,
-                            private val openSeaItemInterceptor: OpenSeaItemInterceptor) {
+                            private val api: MagicFeedApi) {
 
-    private val api = apiRetrofit().create(MagicFeedApi::class.java)
-
-    //@Scheduled(fixedDelay = 1_000)
+    @Scheduled(fixedDelay = 1_000)
     fun updateCache() {
         val oldCache = repository.cache
         val idToOldRoot = oldCache.allItems.associateBy { it["id"] }
         val newAllItems = api.getFeed().blockingFirst().items
-        openSeaItemInterceptor.addOpenSeaData(newAllItems, FeedItemVisitor())
         val version = System.currentTimeMillis()
         (listOf(null) + newAllItems).zipWithNext().forEach { (prev, current) ->
             val oldItem = idToOldRoot[current!!["id"]]
