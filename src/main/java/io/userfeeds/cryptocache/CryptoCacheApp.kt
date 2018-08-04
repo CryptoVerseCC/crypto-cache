@@ -1,7 +1,7 @@
 package io.userfeeds.cryptocache
 
-import io.userfeeds.cryptocache.opensea.DecoratingWithOpenSeaMethodInterceptor
 import io.userfeeds.cryptocache.opensea.OpenSeaDecoratorAnnotationProcessor
+import io.userfeeds.cryptocache.opensea.OpenSeaItemInterceptor
 import io.userfeeds.cryptocache.retrofit.EnableAutoRetrofit
 import io.userfeeds.cryptocache.retrofit.RetrofitAnnotationProcessor
 import okhttp3.OkHttpClient
@@ -40,8 +40,8 @@ class CryptoCacheApp {
             RetrofitAnnotationProcessor(beanFactory, retrofit)
 
     @Bean
-    fun openSeaDecoratorAnnotationProcessor(methodInterceptor: DecoratingWithOpenSeaMethodInterceptor) =
-            OpenSeaDecoratorAnnotationProcessor(methodInterceptor)
+    fun openSeaDecoratorAnnotationProcessor(openSeaItemInterceptor: OpenSeaItemInterceptor) =
+            OpenSeaDecoratorAnnotationProcessor(openSeaItemInterceptor)
 
 }
 

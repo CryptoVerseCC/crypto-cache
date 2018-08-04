@@ -12,19 +12,17 @@ class FeedCacheUpdater(private val repository: FeedRepository,
 
     @Scheduled(fixedDelay = 1_000)
     fun updateCache() {
-//        val oldCache = repository.cache
-//        val idToOldRoot = oldCache.allItems.associateBy { it["id"] }
-//        val newAllItems = api.getFeed().blockingFirst().items
-//        val version = System.currentTimeMillis()
-//        newAllItems.forEach {
-//            val oldItem = idToOldRoot[it["id"]]
-//            it["version"] = if (equalByAmountOfRepliesAndLikes(it, oldItem)) (oldItem!!["version"] as Long) else version
-//        }
-//        openSeaItemInterceptor.addOpenSeaData(newAllItems, FeedItemVisitor)
-//        repository.cache = Cache(newAllItems, version)
-//        logger.info("Update cache ${javaClass.simpleName}")
-//        println("kasper")
-        println(api.getFeed().blockingFirst())
+        val oldCache = repository.cache
+        val idToOldRoot = oldCache.allItems.associateBy { it["id"] }
+        val newAllItems = api.getFeed().blockingFirst().items
+        val version = System.currentTimeMillis()
+        newAllItems.forEach {
+            val oldItem = idToOldRoot[it["id"]]
+            it["version"] = if (equalByAmountOfRepliesAndLikes(it, oldItem)) (oldItem!!["version"] as Long) else version
+        }
+        openSeaItemInterceptor.addOpenSeaData(newAllItems, FeedItemVisitor())
+        repository.cache = Cache(newAllItems, version)
+        logger.info("Update cache ${javaClass.simpleName}")
     }
 
     private fun equalByAmountOfRepliesAndLikes(newItem: FeedItem, oldItem: FeedItem?): Boolean {

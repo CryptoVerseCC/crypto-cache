@@ -1,17 +1,44 @@
 package io.userfeeds.cryptocache.opensea
 
+import io.reactivex.Observable
+import io.userfeeds.cryptocache.ContextItem
+import io.userfeeds.cryptocache.ItemsWrapper
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessorAdapter
-import org.springframework.cglib.proxy.Enhancer
 import org.springframework.core.annotation.AnnotationUtils
+import java.lang.reflect.InvocationHandler
+import java.lang.reflect.Method
+import java.lang.reflect.Proxy.newProxyInstance
+import kotlin.reflect.full.createInstance
 
 class OpenSeaDecoratorAnnotationProcessor(
-        private val methodInterceptor: DecoratingWithOpenSeaMethodInterceptor
+        private val openSeaItemInterceptor: OpenSeaItemInterceptor
 ) : InstantiationAwareBeanPostProcessorAdapter() {
 
     override fun postProcessAfterInitialization(bean: Any, beanName: String?): Any? {
-        if (AnnotationUtils.findAnnotation(bean.javaClass, OpenSeaDecorator::class.java) != null) {
-            return Enhancer.create(bean.javaClass.interfaces.first(), methodInterceptor)
+        val openSeaDecorator = AnnotationUtils.findAnnotation(bean.javaClass, OpenSeaDecorator::class.java)
+        if (openSeaDecorator != null) {
+            @Suppress("UNCHECKED_CAST")
+            val visitor = openSeaDecorator.visitorClass.createInstance() as OpenSeaItemInterceptor.Visitor<ContextItem>
+            return newProxyInstance(bean.javaClass.classLoader, bean.javaClass.interfaces, DecoratingWithOpenSeaMethodInterceptor(openSeaItemInterceptor, visitor, bean))
         }
         return bean
+    }
+
+    private class DecoratingWithOpenSeaMethodInterceptor(private val openSeaInterceptor: OpenSeaItemInterceptor,
+                                                         private val itemVisitor: OpenSeaItemInterceptor.Visitor<ContextItem>,
+                                                         private val original: Any) : InvocationHandler {
+        override fun invoke(proxy: Any?, method: Method, args: Array<out Any>?): Any {
+            val methodResult = callOriginalMethod(method, args)
+            return methodResult.map { it.apply { openSeaInterceptor.addOpenSeaData(it.items, itemVisitor) } }
+        }
+
+        private fun callOriginalMethod(method: Method, args: Array<out Any>?): Observable<ItemsWrapper> {
+            @Suppress("UNCHECKED_CAST")
+            return if (method.parameterCount == 0)
+                method.invoke(original)
+            else {
+                method.invoke(original, args)
+            } as Observable<ItemsWrapper>
+        }
     }
 }
