@@ -9,8 +9,7 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 @RestController
-class DecorateWithOpenSeaController(private val openSeaItemInterceptor: OpenSeaItemInterceptor,
-                                    private val api: RankingApi) {
+class DecorateWithOpenSeaController(private val api: RankingApi) {
 
     @PostMapping("/decorate_with_open_sea")
     fun addOpenSea(@RequestBody flow: MutableMap<String, Any>): MutableMap<String, Any> {
