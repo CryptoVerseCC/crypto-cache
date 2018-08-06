@@ -1,6 +1,7 @@
 package io.userfeeds.cryptocache.opensea
 
-import io.reactivex.Single
+import io.reactivex.Observable
+import io.userfeeds.cryptocache.ItemsWrapper
 import io.userfeeds.cryptocache.retrofit.AutoRetrofit
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -12,8 +13,8 @@ import retrofit2.http.POST
 class DecorateWithOpenSeaController(private val api: RankingApi) {
 
     @PostMapping("/decorate_with_opensea")
-    fun addOpenSea(@RequestBody flow: MutableMap<String, Any>): MutableMap<String, Any> {
-        return api.ranking(flow).blockingGet()
+    fun addOpenSea(@RequestBody flow: MutableMap<String, Any>): ItemsWrapper {
+        return api.ranking(flow).blockingFirst()
     }
 
     private class Visitor : OpenSeaItemInterceptor.Visitor<MutableMap<String, Any>> {
@@ -21,7 +22,7 @@ class DecorateWithOpenSeaController(private val api: RankingApi) {
         override fun visit(item: MutableMap<String, Any>, accept: (MutableMap<String, Any>) -> Unit) {
             accept(item)
             item.likes.forEach(accept)
-            item.replies.forEach { visit(item, accept) }
+            item.replies.forEach { visit(it, accept) }
         }
     }
 
@@ -30,7 +31,7 @@ class DecorateWithOpenSeaController(private val api: RankingApi) {
     interface RankingApi {
 
         @POST("/ranking")
-        fun ranking(@Body flow: MutableMap<String, Any>): Single<MutableMap<String, Any>>
+        fun ranking(@Body flow: MutableMap<String, Any>): Observable<ItemsWrapper>
     }
 
     private companion object {

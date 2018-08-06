@@ -11,15 +11,15 @@ class OpenSeaItemInterceptor(private val openSeaCache: OpenSeaCache) {
     fun <T : ContextItem> addOpenSeaData(
             newAllItems: List<T>,
             visitor: Visitor<T>) {
-        val ids = extractIds(newAllItems, visitor)
-        val openSeaDataById = getOpenSeaDataByContext(ids)
+        val contexts = extractContexts(newAllItems, visitor)
+        val openSeaDataById = getOpenSeaDataByContext(contexts)
         addContextInfo(newAllItems, visitor, openSeaDataById)
     }
 
-    private fun <T : ContextItem> extractIds(newAllItems: List<T>, visitor: Visitor<T>): List<String> {
-        val ids = mutableListOf<String>()
-        newAllItems.forEach { visitor.visit(it) { it.context?.let { ids.add(it) } } }
-        return ids
+    private fun <T : ContextItem> extractContexts(newAllItems: List<T>, visitor: Visitor<T>): List<String> {
+        val contexts = mutableListOf<String>()
+        newAllItems.forEach { visitor.visit(it) { it.context?.let(contexts::add) } }
+        return contexts
     }
 
     private fun <T : ContextItem> addContextInfo(
