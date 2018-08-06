@@ -47,12 +47,11 @@ class OpenSeaItemInterceptor(private val openSeaCache: OpenSeaCache) {
                 .buffer(25)
                 .concatMap {
                     it.toObservable().flatMap { ctx ->
-                        openSeaCache.asset(ctx).map { it to ctx }
+                        openSeaCache.asset(ctx).map { ctx to it }
                     }
                 }
                 .toList()
                 .blockingGet()
-                .map { it.second to it.first }
                 .toMap()
     }
 
