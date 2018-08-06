@@ -19,7 +19,7 @@ class OpenSeaConfig {
             .addConverterFactory(MoshiConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.from(Executors.newFixedThreadPool(10))))
             .client(OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.HEADERS }).build())
-            .baseUrl("https://opensea-api.herokuapp.com/")
+            .baseUrl("https://api.opensea.io/api/v1/")
             .build()
 
     @Bean
