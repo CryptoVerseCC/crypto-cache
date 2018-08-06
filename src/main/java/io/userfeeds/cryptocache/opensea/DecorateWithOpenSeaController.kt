@@ -11,7 +11,7 @@ import retrofit2.http.POST
 @RestController
 class DecorateWithOpenSeaController(private val api: RankingApi) {
 
-    @PostMapping("/decorate_with_open_sea")
+    @PostMapping("/decorate_with_opensea")
     fun addOpenSea(@RequestBody flow: MutableMap<String, Any>): MutableMap<String, Any> {
         return api.ranking(flow).blockingGet()
     }
