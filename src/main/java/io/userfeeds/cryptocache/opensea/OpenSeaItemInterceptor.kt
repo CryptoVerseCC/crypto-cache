@@ -16,8 +16,8 @@ class OpenSeaItemInterceptor(private val openSeaCache: OpenSeaCache) {
         addContextInfo(newAllItems, visitor, openSeaDataById)
     }
 
-    private fun <T : ContextItem> extractContexts(newAllItems: List<T>, visitor: Visitor<T>): List<String> {
-        val contexts = mutableListOf<String>()
+    private fun <T : ContextItem> extractContexts(newAllItems: List<T>, visitor: Visitor<T>): Set<String> {
+        val contexts = mutableSetOf<String>()
         newAllItems.forEach { visitor.visit(it) { it.context?.let(contexts::add) } }
         return contexts
     }
@@ -25,8 +25,7 @@ class OpenSeaItemInterceptor(private val openSeaCache: OpenSeaCache) {
     private fun <T : ContextItem> addContextInfo(
             newAllItems: List<T>,
             visitor: Visitor<T>,
-            openSeaDataByContext: Map<String, OpenSeaData>): List<String> {
-        val ids = mutableListOf<String>()
+            openSeaDataByContext: Map<String, OpenSeaData>) {
         newAllItems.forEach {
             visitor.visit(it) { item ->
                 item.context?.let { ctx ->
@@ -36,12 +35,10 @@ class OpenSeaItemInterceptor(private val openSeaCache: OpenSeaCache) {
                 }
             }
         }
-        return ids
     }
 
-    private fun getOpenSeaDataByContext(ids: List<String>): Map<String, OpenSeaData> {
-        return ids
-                .distinct()
+    private fun getOpenSeaDataByContext(contexts: Set<String>): Map<String, OpenSeaData> {
+        return contexts
                 .filter { it.startsWith("ethereum:") }
                 .toObservable()
                 .buffer(25)
