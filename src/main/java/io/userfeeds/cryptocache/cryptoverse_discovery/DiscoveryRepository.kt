@@ -27,7 +27,11 @@ class DiscoveryRepository {
             "ethereum:0xb2c0782ae4a299f7358758b2d15da9bf29e1dd99" to erc721, // Mons
             "ethereum:0xc70be5b7c19529ef642d16c10dfe91c58b5c3bf0" to erc721, // Myeth
             "ethereum:0x663e4229142a27f00bafb5d087e1e730648314c3" to erc721, // Panda
+            "ethereum:0x0d8775f648430679a709e98d2b0cb6250d2887ef" to erc20, // Basic Attention Token
             "ethereum:0xd26114cd6ee289accf82350c8d8487fedb8a0c07" to erc20, // OMG
+            "ethereum:0xa74476443119A942dE498590Fe1f2454d7D4aC0d" to erc20, // Golem
+            "ethereum:0x744d70fdbe2ba4cf95131626614a1763df805b9e" to erc20, // Status
+            "ethereum:0xe41d2489571d322189246dafa5ebde1f4699f498" to erc20, // ZRX
             "ethereum:0xfa6f7881e52fdf912c4a285d78a3141b089ce859" to erc20,
             "ethereum:0x108c05cac356d93b351375434101cfd3e14f7e44" to erc20,
             "ethereum:0x0f5d2fb29fb7d3cfee444a200298f468908cc942" to erc20,
