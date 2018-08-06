@@ -18,8 +18,8 @@ class OpenSeaDecoratorAnnotationProcessor(
     override fun postProcessAfterInitialization(bean: Any, beanName: String?): Any? {
         val openSeaDecorator = AnnotationUtils.findAnnotation(bean.javaClass, OpenSeaDecorator::class.java)
         if (openSeaDecorator != null) {
-            @Suppress("UNCHECKED_CAST")
             openSeaDecorator.visitorClass.constructors.forEach { it.isAccessible = true }
+            @Suppress("UNCHECKED_CAST")
             val visitor = openSeaDecorator.visitorClass.createInstance() as OpenSeaItemInterceptor.Visitor<ContextItem>
             return newProxyInstance(bean.javaClass.classLoader, bean.javaClass.interfaces, DecoratingWithOpenSeaMethodInterceptor(openSeaItemInterceptor, visitor, bean))
         }
