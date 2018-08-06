@@ -29,7 +29,7 @@ class DiscoveryRepository {
             "ethereum:0x663e4229142a27f00bafb5d087e1e730648314c3" to erc721, // Panda
             "ethereum:0x0d8775f648430679a709e98d2b0cb6250d2887ef" to erc20, // Basic Attention Token
             "ethereum:0xd26114cd6ee289accf82350c8d8487fedb8a0c07" to erc20, // OMG
-            "ethereum:0xa74476443119A942dE498590Fe1f2454d7D4aC0d" to erc20, // Golem
+            "ethereum:0xa74476443119a942de498590fe1f2454d7d4ac0d" to erc20, // Golem
             "ethereum:0x744d70fdbe2ba4cf95131626614a1763df805b9e" to erc20, // Status
             "ethereum:0xe41d2489571d322189246dafa5ebde1f4699f498" to erc20, // ZRX
             "ethereum:0xfa6f7881e52fdf912c4a285d78a3141b089ce859" to erc20,
