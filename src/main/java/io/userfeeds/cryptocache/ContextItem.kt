@@ -9,5 +9,5 @@ val ContextItem.context
     get() = this["context"] as String?
 
 class ContextItemVisitor : OpenSeaItemInterceptor.Visitor<ContextItem> {
-    override fun visit(item: ContextItem, f: (ContextItem) -> Unit) = f(item)
+    override fun visit(item: ContextItem, accept: (ContextItem) -> Unit) = accept(item)
 }

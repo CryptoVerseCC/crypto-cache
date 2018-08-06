@@ -13,12 +13,12 @@ val FeedItem.likes
     get() = this["likes"] as List<FeedItem>
 
 class FeedItemVisitor : OpenSeaItemInterceptor.Visitor<FeedItem> {
-    override fun visit(item: FeedItem, f: (FeedItem) -> Unit) {
-        f(item)
+    override fun visit(item: FeedItem, accept: (FeedItem) -> Unit) {
+        accept(item)
         item.replies.forEach {
-            f(it)
-            item.likes.forEach(f)
+            accept(it)
+            item.likes.forEach(accept)
         }
-        item.likes.forEach(f)
+        item.likes.forEach(accept)
     }
 }

@@ -57,6 +57,6 @@ class OpenSeaItemInterceptor(private val openSeaCache: OpenSeaCache) {
     }
 
     interface Visitor<T> {
-        fun visit(item: T, f: (T) -> Unit)
+        fun visit(item: T, accept: (T) -> Unit)
     }
 }
