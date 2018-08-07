@@ -13,7 +13,7 @@ import retrofit2.http.POST
 class DecorateWithOpenSeaController(private val api: RankingApi) {
 
     @PostMapping("/decorate_with_opensea")
-    fun addOpenSea(@RequestBody flow: MutableMap<String, Any>): ItemsWrapper {
+    fun decorateWithOpenSea(@RequestBody flow: MutableMap<String, Any>): ItemsWrapper {
         return api.ranking(flow).blockingFirst()
     }
 

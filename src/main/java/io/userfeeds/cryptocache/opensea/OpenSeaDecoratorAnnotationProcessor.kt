@@ -26,9 +26,11 @@ class OpenSeaDecoratorAnnotationProcessor(
         return bean
     }
 
-    private class DecoratingWithOpenSeaMethodInterceptor(private val openSeaInterceptor: OpenSeaItemInterceptor,
-                                                         private val itemVisitor: OpenSeaItemInterceptor.Visitor<ContextItem>,
-                                                         private val original: Any) : InvocationHandler {
+    private class DecoratingWithOpenSeaMethodInterceptor(
+            private val openSeaInterceptor: OpenSeaItemInterceptor,
+            private val itemVisitor: OpenSeaItemInterceptor.Visitor<ContextItem>,
+            private val original: Any) : InvocationHandler {
+
         override fun invoke(proxy: Any?, method: Method, args: Array<out Any>?): Any {
             val methodResult = callOriginalMethod(method, args)
             return methodResult.map { it.apply { openSeaInterceptor.addOpenSeaData(it.items, itemVisitor) } }

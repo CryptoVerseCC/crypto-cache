@@ -11,16 +11,14 @@ class OpenSeaCacheUpdater(
         private val service: OpenSeaService
 ) {
 
-    @Scheduled(fixedDelay = 8 * 3600 * 1000, initialDelay = 3600 * 1000)
+    @Scheduled(initialDelay = 3600 * 1000, fixedDelay = 8 * 3600 * 1000)
     fun updateCache() {
         val newItems = repository.findAll()
-                .map(OpenSeaData::asset)
+                .map(OpenSeaData::context)
                 .toObservable()
                 .buffer(25)
                 .concatMap {
-                    it.toObservable().flatMap { asset ->
-                        service.data(asset)
-                    }
+                    it.toObservable().flatMap(service::loadData)
                 }
                 .toList()
                 .blockingGet()

@@ -6,6 +6,7 @@ data class ContextInfoApiModel(
         val image_url: String,
         val name: String?
 ) {
+
     constructor(openSeaData: OpenSeaData) :
             this(openSeaData.backgroundColor, openSeaData.externalLink, openSeaData.imageUrl, openSeaData.name)
 }
