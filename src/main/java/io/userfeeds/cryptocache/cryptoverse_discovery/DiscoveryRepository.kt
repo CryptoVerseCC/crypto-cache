@@ -1,7 +1,7 @@
 package io.userfeeds.cryptocache.cryptoverse_discovery
 
-import io.userfeeds.cryptocache.cryptoverse_discovery.Type.erc20
-import io.userfeeds.cryptocache.cryptoverse_discovery.Type.erc721
+import io.userfeeds.contractmapping.CONTRACTS
+import io.userfeeds.contractmapping.Contract
 import org.springframework.stereotype.Component
 
 enum class Type {
@@ -13,37 +13,37 @@ enum class Type {
 class DiscoveryRepository {
 
     val assets = mapOf(
-            "ethereum:0x06012c8cf97bead5deae237070f9587f8e7a266d" to erc721, // CK
-            "ethereum:0xf5b0a3efb8e8e4c201e2a935f110eaaf3ffecb8d" to erc721, // Axie
-            "ethereum:0xf7a6e15dfd5cdd9ef12711bd757a9b6021abf643" to erc721, // Bots
-            "ethereum:0xa6d954d08877f8ce1224f6bfb83484c7d3abf8e9" to erc721, // Moji
-            "ethereum:0x323a3e1693e7a0959f65972f3bf2dfcb93239dfe" to erc721, // DAC
-            "ethereum:0xdde2d979e8d39bb8416eafcfc1758f3cab2c9c72" to erc721, // KO
-            "ethereum:0xdcaad9fd9a74144d226dbf94ce6162ca9f09ed7e" to erc721, // Str
-            "ethereum:0x4fece400c0d3db0937162ab44bab34445626ecfe" to erc721, // Town
-            "ethereum:0x71c118b00759b0851785642541ceb0f4ceea0bd5" to erc721, // Chibi
-            "ethereum:0x87d598064c736dd0c712d329afcfaa0ccc1921a1" to erc721, // Fighters
-            "ethereum:0xabc7e6c01237e8eef355bba2bf925a730b714d5f" to erc721, // Saga
-            "ethereum:0xb2c0782ae4a299f7358758b2d15da9bf29e1dd99" to erc721, // Mons
-            "ethereum:0xc70be5b7c19529ef642d16c10dfe91c58b5c3bf0" to erc721, // Myeth
-            "ethereum:0x663e4229142a27f00bafb5d087e1e730648314c3" to erc721, // Panda
-            "ethereum:0xd4202b234c15255bf0511d3380e83bda9172a72b" to erc721, // CryptoCows
-            "ethereum:0x79986af15539de2db9a5086382daeda917a9cf0c" to erc721, // Voxels
-            "ethereum:0x0d8775f648430679a709e98d2b0cb6250d2887ef" to erc20, // Basic Attention Token
-            "ethereum:0xd26114cd6ee289accf82350c8d8487fedb8a0c07" to erc20, // OMG
-            "ethereum:0xa74476443119a942de498590fe1f2454d7d4ac0d" to erc20, // Golem
-            "ethereum:0x744d70fdbe2ba4cf95131626614a1763df805b9e" to erc20, // Status
-            "ethereum:0xe41d2489571d322189246dafa5ebde1f4699f498" to erc20, // ZRX
-            "ethereum:0xfa6f7881e52fdf912c4a285d78a3141b089ce859" to erc20,
-            "ethereum:0x108c05cac356d93b351375434101cfd3e14f7e44" to erc20,
-            "ethereum:0x0f5d2fb29fb7d3cfee444a200298f468908cc942" to erc20,
-            "ethereum:0x89205a3a3b2a69de6dbf7f01ed13b2108b2c43e7" to erc20,
-            "ethereum:0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2" to erc20,
-            "ethereum:0xc5fdd3e4665b5d7bc4dc9102622d7cb0fe510b65" to erc20, // Sanmari
-            "ethereum:0x97d392337cc92564085ac51b99178a371c8bdcf3" to erc20, // Kiyosalo
-            "ethereum:0x3bc410be257b42804e2ad948f2c1c9798c0b9920" to erc20, // Ookimaki
-            "ethereum:0xb7fc08177bcba924255132f361084d7994eafcf0" to erc20, // TKX
-            "ethereum:0xc93058ca0cc2330b847c001c835fc926fedf5a07" to erc20 // %
+            CONTRACTS.CRYPTOKITTIES.asset(),
+            CONTRACTS.AXIES.asset(),
+            CONTRACTS.CRYPTOBOTS.asset(),
+            CONTRACTS.ETH_MOJI.asset(),
+            CONTRACTS.DIGITAL_ART_CHAIN.asset(),
+            CONTRACTS.KNOWN_ORIGIN.asset(),
+            CONTRACTS.CRYPTO_STRIKERS.asset(),
+            CONTRACTS.ETH_TOWN.asset(),
+            CONTRACTS.CHIBI_FIGHTERS.asset(),
+            CONTRACTS.CRYPTO_FIGHTERS.asset(),
+            CONTRACTS.CRYPTO_SAGA.asset(),
+            CONTRACTS.ETHEREMON.asset(),
+            CONTRACTS.MYTHEREUM.asset(),
+            CONTRACTS.PANDA_EARTH.asset(),
+            CONTRACTS.CRYPTO_COWS.asset(),
+            CONTRACTS.CRYPTO_VOXELS.asset(),
+            CONTRACTS.BASIC_ATTENTION_TOKEN.asset(),
+            CONTRACTS.OMNISE_GO.asset(),
+            CONTRACTS.GOLEM.asset(),
+            CONTRACTS.STATUS.asset(),
+            CONTRACTS.ZRX.asset(),
+            CONTRACTS.AVOCADO.asset(),
+            CONTRACTS.BENTYN.asset(),
+            CONTRACTS.DECENTRALAND_MANA.asset(),
+            CONTRACTS.UNICORN.asset(),
+            CONTRACTS.MAKER.asset(),
+            CONTRACTS.SANMARICOIN.asset(),
+            CONTRACTS.KIYOSALO.asset(),
+            CONTRACTS.DDGT.asset(),
+            CONTRACTS.TOKEN_X.asset(),
+            CONTRACTS.PERCENT.asset()
     )
 
     val discoveries = mutableMapOf<String, Discovery>()
@@ -56,5 +56,10 @@ class DiscoveryRepository {
         discoveries.put(asset, discovery)
     }
 }
+
+private fun Contract.asset(): Pair<String, Type> {
+    return "$network:$address" to if (is721) Type.erc721 else Type.erc20
+}
+
 
 data class Discovery(val latest: List<Any>, val twitter: List<Any>, val facebook: List<Any>, val instagram: List<Any>, val github: List<Any>)
