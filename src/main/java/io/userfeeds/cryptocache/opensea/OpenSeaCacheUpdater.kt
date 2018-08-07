@@ -22,7 +22,7 @@ class OpenSeaCacheUpdater(
                 }
                 .toList()
                 .blockingGet()
-        repository.saveAll(newItems)
         cache.update(newItems)
+        repository.saveAll(newItems)
     }
 }
