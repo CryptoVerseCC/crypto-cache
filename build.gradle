@@ -59,9 +59,3 @@ dependencies {
     compile "io.reactivex.rxjava2:rxjava:2.1.7"
     compile "io.reactivex.rxjava2:rxkotlin:2.2.0"
 }
-
-task getDeps(type: Copy) {
-    from sourceSets.main.runtimeClasspath
-    from sourceSets.test.runtimeClasspath
-    into 'runtime/'
-}
