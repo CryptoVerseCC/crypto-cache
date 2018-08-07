@@ -28,6 +28,7 @@ class DiscoveryRepository {
             "ethereum:0xc70be5b7c19529ef642d16c10dfe91c58b5c3bf0" to erc721, // Myeth
             "ethereum:0x663e4229142a27f00bafb5d087e1e730648314c3" to erc721, // Panda
             "ethereum:0xd4202b234c15255bf0511d3380e83bda9172a72b" to erc721, // CryptoCows
+            "ethereum:0x79986af15539de2db9a5086382daeda917a9cf0c" to erc721, // Voxels
             "ethereum:0x0d8775f648430679a709e98d2b0cb6250d2887ef" to erc20, // Basic Attention Token
             "ethereum:0xd26114cd6ee289accf82350c8d8487fedb8a0c07" to erc20, // OMG
             "ethereum:0xa74476443119a942de498590fe1f2454d7d4ac0d" to erc20, // Golem
