@@ -16,7 +16,7 @@ class OpenSeaCache(
     init {
         logger.info("Cache initialization start...")
         val items = openSeaRepository.findAll()
-        cache.putAll(items.map { it.context to Observable.just(it) }.toMap())
+        cache.putAll(items.map { it.context to Observable.just(it) })
         logger.info("Cache initialization ended")
     }
 
@@ -34,6 +34,6 @@ class OpenSeaCache(
     }
 
     fun update(newItems: MutableList<OpenSeaData>) {
-        cache.putAll(newItems.map { it.context to Observable.just(it) }.toMap())
+        cache.putAll(newItems.map { it.context to Observable.just(it) })
     }
 }
