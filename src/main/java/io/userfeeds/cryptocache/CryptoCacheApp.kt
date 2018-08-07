@@ -31,7 +31,7 @@ class CryptoCacheApp {
 
     @Bean
     @Primary
-    fun retrofit() = Retrofit.Builder()
+    fun retrofit(): Retrofit = Retrofit.Builder()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(MoshiConverterFactory.create())
             .baseUrl(apiBaseUrl)
