@@ -12,22 +12,16 @@ class OpenSeaCache(
 ) {
 
     private val cache = ConcurrentHashMap<String, Observable<OpenSeaData>>()
-    private val cacheInit = initializeCache()
 
-    fun getData(context: String): Observable<OpenSeaData> {
-        return cacheInit.flatMap {
-            cache.getOrPut(context) { loadDataFromApi(context) }
-        }
+    init {
+        logger.info("Cache initialization start...")
+        val items = openSeaRepository.findAll()
+        cache.putAll(items.map { it.context to Observable.just(it) }.toMap())
+        logger.info("Cache initialization ended")
     }
 
-    private fun initializeCache(): Observable<Unit> {
-        return Observable
-                .fromCallable {
-                    logger.warn("Cache initialization started!")
-                    val items = openSeaRepository.findAll()
-                    cache.putAll(items.map { it.context to Observable.just(it) }.toMap())
-                }
-                .cache()
+    fun getData(context: String): Observable<OpenSeaData> {
+        return cache.getOrPut(context) { loadDataFromApi(context) }
     }
 
     private fun loadDataFromApi(context: String): Observable<OpenSeaData> {
