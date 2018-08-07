@@ -49,11 +49,11 @@ class DiscoveryRepository {
     val discoveries = mutableMapOf<String, Discovery>()
 
     fun get(asset: String): Discovery? {
-        return discoveries.get(asset)
+        return discoveries[asset]
     }
 
     fun put(asset: String, discovery: Discovery) {
-        discoveries.put(asset, discovery)
+        discoveries[asset] = discovery
     }
 }
 
