@@ -47,7 +47,6 @@ class CryptoCacheApp {
     @Bean
     fun openSeaDecoratorAnnotationProcessor(openSeaItemInterceptor: OpenSeaItemInterceptor) =
             OpenSeaDecoratorAnnotationProcessor(openSeaItemInterceptor)
-
 }
 
 fun main(args: Array<String>) {
