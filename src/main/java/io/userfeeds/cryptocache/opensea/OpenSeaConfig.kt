@@ -23,5 +23,5 @@ class OpenSeaConfig {
             .build()
 
     @Bean
-    fun api(@Qualifier("openSea") retrofit: Retrofit) = retrofit.create(OpenSeaApi::class.java)
+    fun api(@Qualifier("openSea") retrofit: Retrofit): OpenSeaApi = retrofit.create(OpenSeaApi::class.java)
 }
