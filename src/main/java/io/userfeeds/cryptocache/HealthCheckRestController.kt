@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class StatusRestController(private val feedRepository: FeedRepository,
-                           private val magicFeedRepository: MagicFeedRepository) {
+class HealthCheckRestController(private val feedRepository: FeedRepository,
+                                private val magicFeedRepository: MagicFeedRepository) {
 
-    @GetMapping("/status")
-    fun getStatus() {
+    @GetMapping("/health_check")
+    fun isAlive() {
         check(feedRepository.cache.allItems.isNotEmpty() && magicFeedRepository.cache.allItems.isNotEmpty()) { "API is not ready." }
     }
 }
