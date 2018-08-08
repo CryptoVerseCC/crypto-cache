@@ -8,5 +8,10 @@ data class ContextInfoApiModel(
 ) {
 
     constructor(openSeaData: OpenSeaData) :
-            this(openSeaData.backgroundColor, openSeaData.externalLink, openSeaData.imageUrl, openSeaData.name)
+            this(
+                    background_color = openSeaData.backgroundColor,
+                    external_link = openSeaData.externalLink,
+                    image_url = openSeaData.imagePreviewUrl,
+                    name = openSeaData.name
+            )
 }
