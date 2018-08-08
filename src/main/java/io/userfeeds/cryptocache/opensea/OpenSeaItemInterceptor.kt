@@ -2,6 +2,7 @@ package io.userfeeds.cryptocache.opensea
 
 import io.reactivex.rxkotlin.toObservable
 import io.userfeeds.cryptocache.ContextItem
+import io.userfeeds.cryptocache.about
 import io.userfeeds.cryptocache.context
 import org.springframework.stereotype.Component
 
@@ -18,7 +19,12 @@ class OpenSeaItemInterceptor(private val openSeaCache: OpenSeaCache) {
 
     private fun <T : ContextItem> extractContexts(newAllItems: List<T>, visitor: Visitor<T>): Set<String> {
         val contexts = mutableSetOf<String>()
-        newAllItems.forEach { visitor.visit(it) { it.context?.let(contexts::add) } }
+        newAllItems.forEach { rootItem ->
+            visitor.visit(rootItem) { item ->
+                item.context?.let(contexts::add)
+                item.about?.takeIf { it.matches(Regex("ethereum:0x[0-9a-f]{40}:\\d+")) }?.let(contexts::add)
+            }
+        }
         return contexts
     }
 
@@ -26,11 +32,16 @@ class OpenSeaItemInterceptor(private val openSeaCache: OpenSeaCache) {
             newAllItems: List<T>,
             visitor: Visitor<T>,
             openSeaDataByContext: Map<String, OpenSeaData>) {
-        newAllItems.forEach {
-            visitor.visit(it) { item ->
+        newAllItems.forEach { rootItem ->
+            visitor.visit(rootItem) { item ->
                 item.context?.let { ctx ->
                     openSeaDataByContext[ctx]?.let { data ->
                         item["context_info"] = ContextInfoApiModel(data)
+                    }
+                }
+                item.about?.takeIf { it.matches(Regex("ethereum:0x[0-9a-f]{40}:\\d+")) }?.let { about ->
+                    openSeaDataByContext[about]?.let { data ->
+                        item["about_info"] = ContextInfoApiModel(data)
                     }
                 }
             }
