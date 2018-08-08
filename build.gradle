@@ -1,6 +1,7 @@
 buildscript {
     ext.kotlin_version = '1.2.51'
     ext.springBootVersion = '2.0.0.RC1'
+    ext.retrofit_version = '2.4.0'
 
     repositories {
         mavenCentral()
@@ -51,9 +52,10 @@ dependencies {
     runtime "org.postgresql:postgresql"
     compile "com.github.CryptoVerseCC:contract-mapping:84a0a2a"
 
-    compile "com.squareup.retrofit2:retrofit:2.3.0"
-    compile "com.squareup.retrofit2:converter-moshi:2.3.0"
-    compile "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
+    compile "com.squareup.retrofit2:retrofit:${retrofit_version}"
+    compile "com.squareup.retrofit2:converter-moshi:${retrofit_version}"
+    compile "com.squareup.retrofit2:adapter-rxjava2:${retrofit_version}"
+    compile "com.squareup.moshi:moshi-kotlin:1.6.0"
     compile "com.squareup.okhttp3:logging-interceptor:3.9.1"
     compile "com.squareup.okhttp3:okhttp:3.9.1"
     compile "io.reactivex.rxjava2:rxjava:2.1.7"

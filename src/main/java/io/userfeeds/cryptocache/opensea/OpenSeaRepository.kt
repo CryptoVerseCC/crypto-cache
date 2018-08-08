@@ -13,6 +13,6 @@ data class OpenSeaData(
         val context: String,
         val backgroundColor: String?,
         val externalLink: String,
-        val imageUrl: String,
+        val imageUrl: String?,
         val name: String?
 )

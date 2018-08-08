@@ -1,5 +1,7 @@
 package io.userfeeds.cryptocache
 
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import io.userfeeds.cryptocache.opensea.OpenSeaConfig
 import io.userfeeds.cryptocache.opensea.OpenSeaDecoratorAnnotationProcessor
 import io.userfeeds.cryptocache.opensea.OpenSeaItemInterceptor
@@ -31,14 +33,20 @@ class CryptoCacheApp {
 
     @Bean
     @Primary
-    fun retrofit(): Retrofit = Retrofit.Builder()
+    fun retrofit(moshiConverterFactory: MoshiConverterFactory): Retrofit = Retrofit.Builder()
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(moshiConverterFactory)
             .baseUrl(apiBaseUrl)
             .client(OkHttpClient.Builder()
                     .readTimeout(60, TimeUnit.SECONDS)
                     .build())
             .build()
+
+    @Bean
+    fun moshiConverterFactory() =
+            MoshiConverterFactory.create(
+                    Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+            )
 
     @Bean
     fun retrofitAnnotationProcessor(beanFactory: AutowireCapableBeanFactory, retrofit: Retrofit) =
