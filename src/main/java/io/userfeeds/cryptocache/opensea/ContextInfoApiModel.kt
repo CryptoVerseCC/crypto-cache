@@ -11,7 +11,7 @@ data class ContextInfoApiModel(
             this(
                     background_color = openSeaData.backgroundColor,
                     external_link = openSeaData.externalLink,
-                    image_preview_url = openSeaData.imagePreviewUrl,
+                    image_preview_url = openSeaData.imageUrl,
                     name = openSeaData.name
             )
 }
