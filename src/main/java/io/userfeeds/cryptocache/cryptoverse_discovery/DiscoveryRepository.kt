@@ -12,39 +12,7 @@ enum class Type {
 @Component
 class DiscoveryRepository {
 
-    val assets = mapOf(
-            CONTRACTS.CRYPTOKITTIES.asset(),
-            CONTRACTS.AXIES.asset(),
-            CONTRACTS.CRYPTOBOTS.asset(),
-            CONTRACTS.ETH_MOJI.asset(),
-            CONTRACTS.DIGITAL_ART_CHAIN.asset(),
-            CONTRACTS.KNOWN_ORIGIN.asset(),
-            CONTRACTS.CRYPTO_STRIKERS.asset(),
-            CONTRACTS.ETH_TOWN.asset(),
-            CONTRACTS.CHIBI_FIGHTERS.asset(),
-            CONTRACTS.CRYPTO_FIGHTERS.asset(),
-            CONTRACTS.CRYPTO_SAGA.asset(),
-            CONTRACTS.ETHEREMON.asset(),
-            CONTRACTS.MYTHEREUM.asset(),
-            CONTRACTS.PANDA_EARTH.asset(),
-            CONTRACTS.CRYPTO_COWS.asset(),
-            CONTRACTS.CRYPTO_VOXELS.asset(),
-            CONTRACTS.BASIC_ATTENTION_TOKEN.asset(),
-            CONTRACTS.OMNISE_GO.asset(),
-            CONTRACTS.GOLEM.asset(),
-            CONTRACTS.STATUS.asset(),
-            CONTRACTS.ZRX.asset(),
-            CONTRACTS.AVOCADO.asset(),
-            CONTRACTS.BENTYN.asset(),
-            CONTRACTS.DECENTRALAND_MANA.asset(),
-            CONTRACTS.UNICORN.asset(),
-            CONTRACTS.MAKER.asset(),
-            CONTRACTS.SANMARICOIN.asset(),
-            CONTRACTS.KIYOSALO.asset(),
-            CONTRACTS.DDGT.asset(),
-            CONTRACTS.TOKEN_X.asset(),
-            CONTRACTS.PERCENT.asset()
-    )
+    val assets = CONTRACTS.ALL.map { it.asset() }
 
     val discoveries = mutableMapOf<String, Discovery>()
 
