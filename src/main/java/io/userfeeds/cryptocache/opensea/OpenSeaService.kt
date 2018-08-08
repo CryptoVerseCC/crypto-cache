@@ -12,10 +12,10 @@ class OpenSeaService(private val api: OpenSeaApi) {
                 .map {
                     OpenSeaData(
                             context = context,
-                            backgroundColor = it.backgroundColor,
-                            externalLink = it.externalLink?.takeIf { it.contains(tokenId) }
+                            backgroundColor = it.background_color,
+                            externalLink = it.external_link?.takeIf { it.contains(tokenId) }
                                     ?: "https://opensea.io/assets/$contractAddress/$tokenId",
-                            imageUrl = it.imageUrl,
+                            imageUrl = it.image_url,
                             name = it.name
                     )
                 }
