@@ -3,7 +3,7 @@ package io.userfeeds.cryptocache.opensea
 data class ContextInfoApiModel(
         val background_color: String?,
         val external_link: String,
-        val image_url: String,
+        val image_preview_url: String,
         val name: String?
 ) {
 
@@ -11,7 +11,7 @@ data class ContextInfoApiModel(
             this(
                     background_color = openSeaData.backgroundColor,
                     external_link = openSeaData.externalLink,
-                    image_url = openSeaData.imagePreviewUrl,
+                    image_preview_url = openSeaData.imagePreviewUrl,
                     name = openSeaData.name
             )
 }
