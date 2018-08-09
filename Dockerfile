@@ -1,4 +1,5 @@
 FROM openjdk:8 as builder
+EXPOSE 8080
 
 RUN mkdir /workspace
 WORKDIR /workspace
