@@ -11,6 +11,7 @@ class HealthCheckRestController(private val feedRepository: FeedRepository,
 
     @GetMapping("/health_check")
     fun isAlive() {
+        logger.info("Health check executed!")
         check(feedRepository.cache.allItems.isNotEmpty() && magicFeedRepository.cache.allItems.isNotEmpty()) { "API is not ready." }
     }
 }
