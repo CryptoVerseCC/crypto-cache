@@ -17,7 +17,7 @@ class FeedItemVisitor : OpenSeaItemInterceptor.Visitor<FeedItem> {
         accept(item)
         item.replies.forEach {
             accept(it)
-            item.likes.forEach(accept)
+            it.likes.forEach(accept)
         }
         item.likes.forEach(accept)
     }
