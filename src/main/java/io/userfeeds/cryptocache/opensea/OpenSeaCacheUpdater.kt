@@ -11,7 +11,7 @@ class OpenSeaCacheUpdater(
         private val service: OpenSeaService
 ) {
 
-    @Scheduled(initialDelay = 3600 * 1000, fixedDelay = 8 * 3600 * 1000)
+    @Scheduled(initialDelay = 60 * 60 * 1000, fixedDelay = 60 * 60 * 1000)
     fun updateCache() {
         val newItems = repository.findAll()
                 .map(OpenSeaData::context)
