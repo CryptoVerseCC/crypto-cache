@@ -35,14 +35,14 @@ class OpenSeaItemInterceptor(private val openSeaCache: OpenSeaCache) {
         newAllItems.forEach { rootItem ->
             visitor.visit(rootItem) { item ->
                 item.context?.let { ctx ->
-                    openSeaDataByContext[ctx]?.let { data ->
-                        item["context_info"] = ContextInfoApiModel(data)
-                    }
+                    item["context_info"] = openSeaDataByContext[ctx]?.let { data ->
+                        ContextInfoApiModel(data)
+                    } ?: ContextInfoApiModel.EMPTY
                 }
                 item.about?.takeIf { it.matches(Regex("ethereum:0x[0-9a-f]{40}:\\d+")) }?.let { about ->
-                    openSeaDataByContext[about]?.let { data ->
-                        item["about_info"] = ContextInfoApiModel(data)
-                    }
+                    item["about_info"] = openSeaDataByContext[about]?.let { data ->
+                        ContextInfoApiModel(data)
+                    } ?: ContextInfoApiModel.EMPTY
                 }
             }
         }
