@@ -19,5 +19,6 @@ class OpenSeaService(private val api: OpenSeaApi) {
                             name = it.name
                     )
                 }
+                .onErrorResumeNext(Observable.empty<OpenSeaData>())
     }
 }
