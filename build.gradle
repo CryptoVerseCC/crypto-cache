@@ -50,7 +50,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-data-rest"
     compile "org.springframework.boot:spring-boot-starter-data-jpa"
     runtime "org.postgresql:postgresql"
-    compile "com.github.CryptoVerseCC:contract-mapping:379d7aea35dbb397f037bb5e1a7d11eb649adde3"
+    compile "com.github.CryptoVerseCC:contract-mapping:d97d2c78340b6eb8984335f4b280a4354f8d8aa4"
 
     compile "com.squareup.retrofit2:retrofit:${retrofit_version}"
     compile "com.squareup.retrofit2:converter-moshi:${retrofit_version}"
