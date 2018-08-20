@@ -1,9 +1,6 @@
 package io.userfeeds.cryptocache.cryptoverse
 
-import io.userfeeds.cryptocache.FeedItem
-import io.userfeeds.cryptocache.likes
-import io.userfeeds.cryptocache.logger
-import io.userfeeds.cryptocache.replies
+import io.userfeeds.cryptocache.*
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 
@@ -15,12 +12,13 @@ class FeedCacheUpdater(
     @Scheduled(fixedDelay = 1_000)
     fun updateCache() {
         val oldCache = repository.cache
-        val idToOldRoot = oldCache.allItems.associateBy { it["id"] }
+        val idToOldRoot = oldCache.allItems.associateBy { it.id }
         val newAllItems = api.getFeed().blockingFirst().items
         val version = System.currentTimeMillis()
-        newAllItems.forEach {
-            val oldItem = idToOldRoot[it["id"]]
-            it["version"] = if (equalByAmountOfRepliesAndLikes(it, oldItem)) (oldItem!!["version"] as Long) else version
+        (listOf(null) + newAllItems).zipWithNext().forEach { (prev, current) ->
+            val oldItem = idToOldRoot[current!!.id]
+            current.version = if (equalByAmountOfRepliesAndLikes(current, oldItem)) oldItem!!.version else version
+            current.after = prev?.id
         }
         repository.cache = Cache(newAllItems, version)
         logger.info("Update cache ${javaClass.simpleName}")
@@ -36,9 +34,9 @@ class FeedCacheUpdater(
         if (newItem.replies.size != oldItem.replies.size) {
             return false
         }
-        val idToOldReply = (oldItem.replies).associateBy { it["id"] }
-        (newItem.replies).forEach {
-            val oldReply: FeedItem = idToOldReply[it["id"]] ?: return false
+        val idToOldReply = oldItem.replies.associateBy { it.id }
+        newItem.replies.forEach {
+            val oldReply = idToOldReply[it.id] ?: return false
             if (it.likes.size != oldReply.likes.size) {
                 return false
             }

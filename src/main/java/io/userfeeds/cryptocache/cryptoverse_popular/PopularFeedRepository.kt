@@ -1,10 +1,10 @@
-package io.userfeeds.cryptocache.cryptoverse
+package io.userfeeds.cryptocache.cryptoverse_popular
 
 import io.userfeeds.cryptocache.FeedItem
 import org.springframework.stereotype.Component
 
 @Component
-class FeedRepository {
+class PopularFeedRepository {
 
     var cache = Cache(emptyList(), 0)
 }

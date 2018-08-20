@@ -1,13 +1,13 @@
-package io.userfeeds.cryptocache.cryptoverse_magic
+package io.userfeeds.cryptocache.cryptoverse_popular
 
 import io.userfeeds.cryptocache.*
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 
 @Component
-class MagicFeedCacheUpdater(
-        private val repository: MagicFeedRepository,
-        private val api: MagicFeedApi) {
+class PopularFeedCacheUpdater(
+        private val repository: PopularFeedRepository,
+        private val api: PopularFeedApi) {
 
     @Scheduled(fixedDelay = 1_000)
     fun updateCache() {
