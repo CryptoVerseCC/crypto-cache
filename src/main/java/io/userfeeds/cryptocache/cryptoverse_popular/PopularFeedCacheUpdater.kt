@@ -15,10 +15,12 @@ class PopularFeedCacheUpdater(
         val idToOldRoot = oldCache.allItems.associateBy { it.id }
         val newAllItems = api.getFeed().blockingFirst().items
         val version = System.currentTimeMillis()
-        (listOf(null) + newAllItems).zipWithNext().forEach { (prev, current) ->
-            val oldItem = idToOldRoot[current!!.id]
+        newAllItems.forEachIndexed { index, current ->
+            val oldItem = idToOldRoot[current.id]
             current.version = if (equalByAmountOfRepliesAndLikes(current, oldItem)) oldItem!!.version else version
-            current.after = prev?.id
+            if (index != 0) {
+                current.after = newAllItems[index - 1].id
+            }
         }
         repository.cache = Cache(newAllItems, version)
         logger.info("Update cache ${javaClass.simpleName}")

@@ -8,13 +8,11 @@ val FeedItem.id
     @Suppress("UNCHECKED_CAST")
     get() = this["id"] as String
 
-var FeedItem.after: String?
+var FeedItem.after: String
     @Suppress("UNCHECKED_CAST")
     get() = throw UnsupportedOperationException()
     set(value) {
-        if (value != null) {
-            this["after"] = value
-        }
+        this["after"] = value
     }
 
 val FeedItem.replies
