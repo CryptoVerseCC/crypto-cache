@@ -1,12 +1,11 @@
 package io.userfeeds.cryptocache.cryptoverse_magic
 
-import io.userfeeds.cryptocache.FeedItem
+import io.userfeeds.cryptocache.common.Cache
+import io.userfeeds.cryptocache.common.Repository
 import org.springframework.stereotype.Component
 
 @Component
-class MagicFeedRepository {
+class MagicFeedRepository : Repository {
 
-    var cache = Cache(emptyList(), 0)
+    override var cache = Cache(emptyList(), 0)
 }
-
-data class Cache(val allItems: List<FeedItem>, val version: Long)
