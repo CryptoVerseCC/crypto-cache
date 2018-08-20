@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class FeedController(private val repository: PopularFeedRepository) {
+class PopularFeedController(private val repository: PopularFeedRepository) {
 
     @RequestMapping("/cryptoverse_popular_feed")
     fun getFeed(
