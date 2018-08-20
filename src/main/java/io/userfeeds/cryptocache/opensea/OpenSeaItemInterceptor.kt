@@ -22,7 +22,7 @@ class OpenSeaItemInterceptor(private val openSeaCache: OpenSeaCache) {
         newAllItems.forEach { rootItem ->
             visitor.visit(rootItem) { item ->
                 item.context?.let(contexts::add)
-                item.about?.takeIf { it.matches(Regex("ethereum:0x[0-9a-f]{40}:\\d+")) }?.let(contexts::add)
+                item.about?.takeIf { it.matches(Regex("^ethereum:0x[0-9a-f]{40}:\\d+$")) }?.let(contexts::add)
             }
         }
         return contexts
@@ -35,14 +35,16 @@ class OpenSeaItemInterceptor(private val openSeaCache: OpenSeaCache) {
         newAllItems.forEach { rootItem ->
             visitor.visit(rootItem) { item ->
                 item.context?.let { ctx ->
-                    item["context_info"] = openSeaDataByContext[ctx]?.let { data ->
-                        ContextInfoApiModel(data)
-                    } ?: ContextInfoApiModel.EMPTY
+                    val openSeaData = openSeaDataByContext[ctx]
+                    if (openSeaData != null) {
+                        item["context_info"] = ContextInfoApiModel(openSeaData)
+                    }
                 }
-                item.about?.takeIf { it.matches(Regex("ethereum:0x[0-9a-f]{40}:\\d+")) }?.let { about ->
-                    item["about_info"] = openSeaDataByContext[about]?.let { data ->
-                        ContextInfoApiModel(data)
-                    } ?: ContextInfoApiModel.EMPTY
+                item.about?.let { about ->
+                    val openSeaData = openSeaDataByContext[about]
+                    if (openSeaData != null) {
+                        item["about_info"] = ContextInfoApiModel(openSeaData)
+                    }
                 }
             }
         }

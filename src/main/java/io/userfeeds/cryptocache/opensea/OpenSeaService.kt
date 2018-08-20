@@ -19,6 +19,12 @@ class OpenSeaService(private val api: OpenSeaApi) {
                             name = it.name
                     )
                 }
-                .onErrorResumeNext(Observable.empty<OpenSeaData>())
+                .onErrorReturnItem(OpenSeaData(
+                        context = context,
+                        backgroundColor = null,
+                        externalLink = "https://tokntalk.club/404",
+                        imageUrl = null,
+                        name = null
+                ))
     }
 }

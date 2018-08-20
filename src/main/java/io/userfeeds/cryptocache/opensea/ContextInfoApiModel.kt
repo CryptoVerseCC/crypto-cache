@@ -13,13 +13,4 @@ data class ContextInfoApiModel(
                     image_preview_url = openSeaData.imageUrl,
                     name = openSeaData.name
             )
-
-    companion object {
-        val EMPTY = ContextInfoApiModel(
-                background_color = null,
-                external_link = "https://tokntalk.club/404",
-                image_preview_url = null,
-                name = null
-        )
-    }
 }
