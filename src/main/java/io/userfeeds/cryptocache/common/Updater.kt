@@ -8,7 +8,8 @@ object Updater {
     fun updateCache(repository: Repository, api: Any) {
         val oldCache = repository.cache
         val idToOldRoot = oldCache.allItems.associateBy { it.id }
-        val newAllItems = (api.javaClass.getMethod("getFeed").invoke(api) as Observable<ItemsWrapper>).blockingFirst().items
+        val apiCall = api.javaClass.getMethod("getFeed").invoke(api) as Observable<ItemsWrapper>
+        val newAllItems = apiCall.blockingFirst().items
         val version = System.currentTimeMillis()
         newAllItems.forEachIndexed { index, current ->
             val oldItem = idToOldRoot[current.id]
