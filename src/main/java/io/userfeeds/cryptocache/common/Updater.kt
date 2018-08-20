@@ -1,13 +1,14 @@
 package io.userfeeds.cryptocache.common
 
+import io.reactivex.Observable
 import io.userfeeds.cryptocache.*
 
 object Updater {
 
-    fun updateCache(repository: Repository, api: Api) {
+    fun updateCache(repository: Repository, api: Any) {
         val oldCache = repository.cache
         val idToOldRoot = oldCache.allItems.associateBy { it.id }
-        val newAllItems = api.getFeed().blockingFirst().items
+        val newAllItems = (api.javaClass.getMethod("getFeed").invoke(api) as Observable<ItemsWrapper>).blockingFirst().items
         val version = System.currentTimeMillis()
         newAllItems.forEachIndexed { index, current ->
             val oldItem = idToOldRoot[current.id]
