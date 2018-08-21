@@ -1,14 +1,15 @@
-package io.userfeeds.cryptocache.common
+package io.userfeeds.cryptocache.cryptoverse.club.common
 
 import io.reactivex.Observable
 import io.userfeeds.cryptocache.*
+import io.userfeeds.cryptocache.common.Cache
 
 object Updater {
 
-    fun updateCache(repository: Repository, api: Any) {
+    fun updateCache(repository: Repository, api: Any, id: String, algo: String) {
         val oldCache = repository.cache
-        val idToOldRoot = oldCache.allItems.associateBy { it.id }
-        val apiCall = api.javaClass.getMethod("getFeed").invoke(api) as Observable<ItemsWrapper>
+        val idToOldRoot = oldCache.getValue(id).allItems.associateBy { it.id }
+        val apiCall = api.javaClass.getMethod("getFeed", String::class.java, String::class.java).invoke(api, id, algo) as Observable<ItemsWrapper>
         val newAllItems = apiCall.blockingFirst().items
         val version = System.currentTimeMillis()
         newAllItems.forEachIndexed { index, current ->
@@ -18,7 +19,7 @@ object Updater {
                 current.after = newAllItems[index - 1].id
             }
         }
-        repository.cache = Cache(newAllItems, version)
+        repository.cache[id] = Cache(newAllItems, version)
     }
 
     private fun equalByAmountOfRepliesAndLikes(newItem: FeedItem, oldItem: FeedItem?): Boolean {
