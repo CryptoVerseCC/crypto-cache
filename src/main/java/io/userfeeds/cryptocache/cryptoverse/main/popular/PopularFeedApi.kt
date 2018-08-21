@@ -1,4 +1,4 @@
-package io.userfeeds.cryptocache.cryptoverse
+package io.userfeeds.cryptocache.cryptoverse.main.popular
 
 import io.reactivex.Observable
 import io.userfeeds.cryptocache.FeedItemVisitor
@@ -9,8 +9,8 @@ import retrofit2.http.GET
 
 @AutoRetrofit
 @OpenSeaDecorator(FeedItemVisitor::class)
-interface FeedApi {
+interface PopularFeedApi {
 
-    @GET("cryptoverse_feed")
+    @GET("cryptoverse_last_week_popular_feed")
     fun getFeed(): Observable<ItemsWrapper>
 }

@@ -1,16 +1,22 @@
 package io.userfeeds.cryptocache
 
-import io.userfeeds.cryptocache.cryptoverse.FeedRepository
-import io.userfeeds.cryptocache.cryptoverse_magic.MagicFeedRepository
+import io.userfeeds.cryptocache.cryptoverse.main.magic.MagicFeedRepository
+import io.userfeeds.cryptocache.cryptoverse.main.newest.FeedRepository
+import io.userfeeds.cryptocache.cryptoverse.main.popular.PopularFeedRepository
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class HealthCheckRestController(private val feedRepository: FeedRepository,
-                                private val magicFeedRepository: MagicFeedRepository) {
+class HealthCheckRestController(
+        private val feedRepository: FeedRepository,
+        private val popularFeedRepository: PopularFeedRepository,
+        private val magicFeedRepository: MagicFeedRepository) {
 
     @GetMapping("/health_check")
-    fun isAlive() {
-        check(feedRepository.cache.allItems.isNotEmpty() && magicFeedRepository.cache.allItems.isNotEmpty()) { "API is not ready." }
+    fun isReady() {
+        check(feedRepository.cache.allItems.isNotEmpty()
+                && popularFeedRepository.cache.allItems.isNotEmpty()
+                && magicFeedRepository.cache.allItems.isNotEmpty()
+        ) { "API is not ready." }
     }
 }

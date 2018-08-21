@@ -1,4 +1,4 @@
-package io.userfeeds.cryptocache.cryptoverse_popular
+package io.userfeeds.cryptocache.cryptoverse.main.magic
 
 import io.userfeeds.cryptocache.common.Controller
 import io.userfeeds.cryptocache.common.Page
@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class PopularFeedController(private val repository: PopularFeedRepository) {
+class MagicFeedController(private val repository: MagicFeedRepository) {
 
-    @RequestMapping("/cryptoverse_popular_feed")
+    @RequestMapping("/cryptoverse_feed_magic")
     fun getFeed(
             @RequestParam("oldestKnown", required = false) oldestKnown: String?,
             @RequestParam("lastVersion", required = false) lastVersion: Long?,

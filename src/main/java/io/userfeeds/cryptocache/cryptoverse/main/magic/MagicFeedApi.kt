@@ -1,4 +1,4 @@
-package io.userfeeds.cryptocache.cryptoverse_magic
+package io.userfeeds.cryptocache.cryptoverse.main.magic
 
 import io.reactivex.Observable
 import io.userfeeds.cryptocache.FeedItemVisitor

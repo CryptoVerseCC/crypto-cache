@@ -1,4 +1,4 @@
-package io.userfeeds.cryptocache.cryptoverse_magic
+package io.userfeeds.cryptocache.cryptoverse.main.magic
 
 import io.userfeeds.cryptocache.*
 import io.userfeeds.cryptocache.common.Updater
