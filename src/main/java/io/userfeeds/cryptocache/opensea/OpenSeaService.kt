@@ -15,7 +15,8 @@ class OpenSeaService(private val api: OpenSeaApi) {
                             backgroundColor = it.backgroundColor,
                             externalLink = it.externalLink?.takeIf { it.contains(tokenId) }
                                     ?: "https://opensea.io/assets/$contractAddress/$tokenId",
-                            imageUrl = it.imagePreviewUrl,
+                            imageUrl = it.imageUrl?.takeIf { it.endsWith(".svg") }
+                                    ?: it.imagePreviewUrl,
                             name = it.name
                     )
                 }

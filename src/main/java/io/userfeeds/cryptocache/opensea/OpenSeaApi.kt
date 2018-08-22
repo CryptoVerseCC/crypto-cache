@@ -16,6 +16,7 @@ interface OpenSeaApi {
             @Json(name = "background_color") val backgroundColor: String?,
             @Json(name = "external_link") val externalLink: String?,
             @Json(name = "name") val name: String?,
+            @Json(name = "image_url") val imageUrl: String?,
             @Json(name = "image_preview_url") val imagePreviewUrl: String?
     )
 }
