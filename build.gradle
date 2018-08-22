@@ -40,6 +40,9 @@ repositories {
     maven { url "https://repo.spring.io/snapshot" }
     maven { url "https://repo.spring.io/milestone" }
     maven { url 'https://jitpack.io' }
+    maven {
+        url 'https://dl.bintray.com/palantir/releases' // docker-compose-rule is published on bintray
+    }
 }
 
 dependencies {
@@ -60,4 +63,9 @@ dependencies {
     compile "com.squareup.okhttp3:okhttp:3.9.1"
     compile "io.reactivex.rxjava2:rxjava:2.1.7"
     compile "io.reactivex.rxjava2:rxkotlin:2.2.0"
+
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+    testCompile "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
+    testCompile "org.assertj:assertj-core:3.9.0"
+    testCompile 'com.palantir.docker.compose:docker-compose-rule-junit4:0.34.0'
 }
