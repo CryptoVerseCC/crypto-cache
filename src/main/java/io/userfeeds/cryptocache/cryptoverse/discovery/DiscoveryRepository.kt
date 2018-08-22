@@ -1,4 +1,4 @@
-package io.userfeeds.cryptocache.cryptoverse_discovery
+package io.userfeeds.cryptocache.cryptoverse.discovery
 
 import org.springframework.stereotype.Component
 

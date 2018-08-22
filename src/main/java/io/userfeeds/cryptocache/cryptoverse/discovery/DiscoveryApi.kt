@@ -1,4 +1,4 @@
-package io.userfeeds.cryptocache.cryptoverse_discovery
+package io.userfeeds.cryptocache.cryptoverse.discovery
 
 import io.reactivex.Observable
 import io.userfeeds.cryptocache.ContextItemVisitor

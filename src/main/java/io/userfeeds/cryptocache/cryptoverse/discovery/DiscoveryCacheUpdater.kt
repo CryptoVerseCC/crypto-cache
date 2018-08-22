@@ -1,8 +1,8 @@
-package io.userfeeds.cryptocache.cryptoverse_discovery
+package io.userfeeds.cryptocache.cryptoverse.discovery
 
 import io.userfeeds.cryptocache.common.Contract
 import io.userfeeds.cryptocache.common.ContractsProvider
-import io.userfeeds.cryptocache.cryptoverse_discovery.Type.erc20
+import io.userfeeds.cryptocache.cryptoverse.discovery.Type.erc20
 import io.userfeeds.cryptocache.logger
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
