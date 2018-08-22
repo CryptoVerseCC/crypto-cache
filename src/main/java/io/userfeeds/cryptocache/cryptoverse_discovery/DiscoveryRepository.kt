@@ -1,7 +1,7 @@
 package io.userfeeds.cryptocache.cryptoverse_discovery
 
-import io.userfeeds.contractmapping.CONTRACTS
-import io.userfeeds.contractmapping.Contract
+import io.userfeeds.cryptocache.common.Contract
+import io.userfeeds.cryptocache.common.ContractsProvider
 import org.springframework.stereotype.Component
 
 enum class Type {
@@ -10,9 +10,10 @@ enum class Type {
 }
 
 @Component
-class DiscoveryRepository {
+class DiscoveryRepository(
+        private val contractsProvider: ContractsProvider) {
 
-    val assets = CONTRACTS.ALL.map { it.asset() }
+    val assets = contractsProvider.get().map { it.asset() }
 
     val discoveries = mutableMapOf<String, Discovery>()
 
