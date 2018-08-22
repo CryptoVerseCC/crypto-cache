@@ -1,7 +1,5 @@
 package io.userfeeds.cryptocache.cryptoverse_discovery
 
-import io.userfeeds.cryptocache.common.Contract
-import io.userfeeds.cryptocache.common.ContractsProvider
 import org.springframework.stereotype.Component
 
 enum class Type {
@@ -10,10 +8,7 @@ enum class Type {
 }
 
 @Component
-class DiscoveryRepository(
-        private val contractsProvider: ContractsProvider) {
-
-    val assets = contractsProvider.get().map { it.asset() }
+class DiscoveryRepository {
 
     val discoveries = mutableMapOf<String, Discovery>()
 
@@ -24,10 +19,6 @@ class DiscoveryRepository(
     fun put(asset: String, discovery: Discovery) {
         discoveries[asset] = discovery
     }
-}
-
-private fun Contract.asset(): Pair<String, Type> {
-    return "$network:$address" to if (is721) Type.erc721 else Type.erc20
 }
 
 
