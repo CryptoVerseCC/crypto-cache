@@ -2,7 +2,6 @@ package io.userfeeds.cryptocache.common
 
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import io.userfeeds.contractmapping.CONTRACTS
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.springframework.stereotype.Component
@@ -24,22 +23,26 @@ class ContractsProvider(moshiConverterFactory: MoshiConverterFactory) {
             .build()
             .create(ContractMapping::class.java)
 
-    private val contracts: AtomicReference<List<Contract>> = AtomicReference(CONTRACTS.ALL.map { Contract(it.network, it.address, it.name, it.symbol, it.is721) })
+    private val contracts: AtomicReference<List<Contract>> = AtomicReference(fetchCurrentContracts())
 
     @GetMapping("update_contract_mapping")
     fun update(): String {
         try {
-            val currentContracts = contractMapping.getCurrentMapping().blockingGet().values.toList()
-            currentContracts.forEach {
-                if(it.address != it.address.toLowerCase()) {
-                    throw RuntimeException("Patryk!!! miało być lowercasem co to jest ${it.address} w ${it.name}")
-                }
-            }
-            contracts.set(currentContracts)
+            contracts.set(fetchCurrentContracts())
             return "Patryk wszystko poszło ok"
         } catch (e: Exception) {
             return "Patryk coś zjebałeś. Pokaż to Maćkowi jak nie wiesz czemu nie działa ${e.message ?: e.toString()}"
         }
+    }
+
+    private fun fetchCurrentContracts(): List<Contract> {
+        val currentContracts = contractMapping.getCurrentMapping().blockingGet().values.toList()
+        currentContracts.forEach {
+            if (it.address != it.address.toLowerCase()) {
+                throw RuntimeException("Patryk!!! miało być lowercasem co to jest ${it.address} w ${it.name} zmień na ${it.address.toLowerCase()}")
+            }
+        }
+        return currentContracts
     }
 
     fun get(): List<Contract> {
