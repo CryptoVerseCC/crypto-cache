@@ -1,6 +1,6 @@
 package io.userfeeds.cryptocache.cryptoverse.main.newest
 
-import io.userfeeds.cryptocache.common.Updater
+import io.userfeeds.cryptocache.cryptoverse.main.common.Updater
 import io.userfeeds.cryptocache.logger
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component

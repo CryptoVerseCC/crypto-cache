@@ -1,7 +1,7 @@
 package io.userfeeds.cryptocache.cryptoverse.main.popular
 
-import io.userfeeds.cryptocache.common.Controller
-import io.userfeeds.cryptocache.common.Page
+import io.userfeeds.cryptocache.cryptoverse.main.common.Controller
+import io.userfeeds.cryptocache.cryptoverse.main.common.Page
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController

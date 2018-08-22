@@ -1,6 +1,6 @@
 package io.userfeeds.cryptocache.cryptoverse.club.common
 
-import io.userfeeds.cryptocache.common.Cache
+import io.userfeeds.cryptocache.cryptoverse.main.common.Cache
 
 interface Repository {
 

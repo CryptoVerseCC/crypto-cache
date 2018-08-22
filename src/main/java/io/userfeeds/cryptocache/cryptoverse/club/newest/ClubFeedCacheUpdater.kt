@@ -1,6 +1,6 @@
 package io.userfeeds.cryptocache.cryptoverse.club.newest
 
-import io.userfeeds.cryptocache.common.ContractsProvider
+import io.userfeeds.cryptocache.cryptoverse.main.common.ContractsProvider
 import io.userfeeds.cryptocache.cryptoverse.club.common.Updater
 import io.userfeeds.cryptocache.logger
 import org.springframework.scheduling.annotation.Scheduled

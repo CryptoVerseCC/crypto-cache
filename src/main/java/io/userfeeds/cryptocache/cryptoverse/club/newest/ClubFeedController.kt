@@ -1,6 +1,6 @@
 package io.userfeeds.cryptocache.cryptoverse.club.newest
 
-import io.userfeeds.cryptocache.common.Page
+import io.userfeeds.cryptocache.cryptoverse.main.common.Page
 import io.userfeeds.cryptocache.cryptoverse.club.common.Controller
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam

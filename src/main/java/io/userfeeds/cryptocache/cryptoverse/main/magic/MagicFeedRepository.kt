@@ -1,7 +1,7 @@
 package io.userfeeds.cryptocache.cryptoverse.main.magic
 
-import io.userfeeds.cryptocache.common.Cache
-import io.userfeeds.cryptocache.common.Repository
+import io.userfeeds.cryptocache.cryptoverse.main.common.Cache
+import io.userfeeds.cryptocache.cryptoverse.main.common.Repository
 import org.springframework.stereotype.Component
 
 @Component

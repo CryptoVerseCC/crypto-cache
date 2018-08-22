@@ -1,7 +1,7 @@
 package io.userfeeds.cryptocache.cryptoverse.discovery
 
-import io.userfeeds.cryptocache.common.Contract
-import io.userfeeds.cryptocache.common.ContractsProvider
+import io.userfeeds.cryptocache.cryptoverse.main.common.Contract
+import io.userfeeds.cryptocache.cryptoverse.main.common.ContractsProvider
 import io.userfeeds.cryptocache.logger
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
@@ -15,13 +15,14 @@ class DiscoveryCacheUpdater(
     @Scheduled(fixedDelay = 1_000)
     fun updateCache() {
         val contracts = contractsProvider.get()
-        contracts.forEach { updateForAsset(it.asset, it.type) }
+        contracts.forEach(this::updateForAsset)
         logger.info("Update cache ${contracts.size} ${javaClass.simpleName}")
     }
 
-    fun updateForAsset(asset: String, type: Contract.Type) {
+    private fun updateForAsset(contract: Contract) {
+        val asset = contract.asset
         try {
-            val name = if (type == Contract.Type.erc20) "experimental_author_balance" else "experimental_filter_origin"
+            val name = if (contract.is721) "experimental_filter_origin" else "experimental_author_balance"
             val latest = api.latestPurrers(name, asset).blockingFirst().items
             val twitter = api.socialProfiles("twitter", name, asset).blockingFirst().items
             val facebook = api.socialProfiles("facebook", name, asset).blockingFirst().items

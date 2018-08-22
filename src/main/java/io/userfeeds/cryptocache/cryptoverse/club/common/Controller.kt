@@ -1,6 +1,6 @@
 package io.userfeeds.cryptocache.cryptoverse.club.common
 
-import io.userfeeds.cryptocache.common.Page
+import io.userfeeds.cryptocache.cryptoverse.main.common.Page
 import io.userfeeds.cryptocache.id
 import io.userfeeds.cryptocache.version
 

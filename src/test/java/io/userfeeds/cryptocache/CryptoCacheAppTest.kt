@@ -1,7 +1,7 @@
 package io.userfeeds.cryptocache
 
 import com.palantir.docker.compose.DockerComposeRule
-import io.userfeeds.cryptocache.common.ContractsProvider
+import io.userfeeds.cryptocache.cryptoverse.main.common.ContractsProvider
 import org.assertj.core.api.Assertions.*
 import org.junit.ClassRule
 import org.junit.Ignore
