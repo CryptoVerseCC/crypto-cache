@@ -17,4 +17,16 @@ data class Contract(
         val name: String,
         val symbol: String,
         val is721: Boolean
-)
+) {
+
+    val asset: String
+        get() = "$network:$address"
+
+    val type: Type
+        get() = if (is721) Type.erc721 else Type.erc20
+
+    enum class Type {
+        erc721,
+        erc20
+    }
+}

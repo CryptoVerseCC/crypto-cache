@@ -2,11 +2,6 @@ package io.userfeeds.cryptocache.cryptoverse.discovery
 
 import org.springframework.stereotype.Component
 
-enum class Type {
-    erc721,
-    erc20
-}
-
 @Component
 class DiscoveryRepository {
 
