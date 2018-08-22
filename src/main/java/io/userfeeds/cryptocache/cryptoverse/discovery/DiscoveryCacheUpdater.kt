@@ -28,7 +28,7 @@ class DiscoveryCacheUpdater(
             val instagram = api.socialProfiles("instagram", name, asset).blockingFirst().items
             val github = api.socialProfiles("github", name, asset).blockingFirst().items
             repository.put(asset, Discovery(latest, twitter, facebook, instagram, github))
-            logger.info("Update cache: $asset ${javaClass.simpleName}")
+            logger.debug("Update cache: $asset ${javaClass.simpleName}")
         } catch (exception: Throwable) {
             logger.warn("Exception during cache update: $asset ${javaClass.simpleName}", exception)
         }
