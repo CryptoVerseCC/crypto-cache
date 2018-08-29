@@ -9,6 +9,7 @@ class OpenSeaService(private val api: OpenSeaApi) {
     fun loadData(context: String): Observable<OpenSeaData> {
         val (_, contractAddress, tokenId) = context.split(':')
         return api.loadData(contractAddress, tokenId)
+                .retry(3)
                 .map {
                     OpenSeaData(
                             context = context,
