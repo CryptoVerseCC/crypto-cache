@@ -18,7 +18,12 @@ class OpenSeaConfig {
     fun retrofit(moshiConverterFactory: MoshiConverterFactory): Retrofit = Retrofit.Builder()
             .addConverterFactory(moshiConverterFactory)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.from(Executors.newFixedThreadPool(10))))
-            .client(OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.HEADERS }).build())
+            .client(OkHttpClient.Builder()
+                    .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.HEADERS })
+                    .addNetworkInterceptor {
+                        it.proceed(it.request().newBuilder().header("X-API-KEY", "51a17355a4574864949683e0217647d6").build())
+                    }
+                    .build())
             .baseUrl("https://api.opensea.io/api/v1/")
             .build()
 
