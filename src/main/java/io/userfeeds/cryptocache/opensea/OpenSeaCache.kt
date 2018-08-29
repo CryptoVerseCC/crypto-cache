@@ -33,7 +33,7 @@ class OpenSeaCache(
                 .share()
     }
 
-    fun update(newItems: MutableList<OpenSeaData>) {
+    fun update(newItems: List<OpenSeaData>) {
         cache.putAll(newItems.map { it.context to Observable.just(it) })
     }
 }

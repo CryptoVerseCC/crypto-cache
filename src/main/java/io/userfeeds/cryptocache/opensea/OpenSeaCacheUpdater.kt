@@ -11,18 +11,21 @@ class OpenSeaCacheUpdater(
         private val service: OpenSeaService
 ) {
 
-    @Scheduled(initialDelay = 1, fixedDelay = 60 * 60 * 1000)
+    @Scheduled(initialDelay = 1, fixedDelay = 1)
     fun updateCache() {
-        val newItems = repository.findAll()
+        val existing = repository.findAll()
+        val newItems = existing
                 .map(OpenSeaData::context)
                 .toObservable()
-                .buffer(25)
+                .buffer(2)
                 .concatMap {
                     it.toObservable().flatMap(service::loadData)
                 }
                 .toList()
                 .blockingGet()
-        cache.update(newItems)
-        repository.saveAll(newItems)
+        val existingContexts = existing.map { it.context }.toSet()
+        val newItemsWithoutFails = newItems.filter { it.externalLink != "https://tokntalk.club/404" || !existingContexts.contains(it.context) }
+        cache.update(newItemsWithoutFails)
+        repository.saveAll(newItemsWithoutFails)
     }
 }
