@@ -1,6 +1,7 @@
 package io.userfeeds.cryptocache.opensea
 
 import io.reactivex.rxkotlin.toObservable
+import io.userfeeds.cryptocache.logger
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 
@@ -14,6 +15,10 @@ class OpenSeaCacheUpdater(
     @Scheduled(initialDelay = 60 * 60 * 1000, fixedDelay = 60 * 60 * 1000)
     fun updateCache() {
         val existing = repository.findAll()
+        val bad = existing.filter { it.externalLink == "https://tokntalk.club/404" }
+        if (bad.isNotEmpty()) {
+            logger.warn("Failed amount: ${bad.size}\n${bad.joinToString(separator = "\n")}")
+        }
         val newItems = existing
                 .map(OpenSeaData::context)
                 .toObservable()
