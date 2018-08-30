@@ -4,6 +4,8 @@ import io.reactivex.rxkotlin.toObservable
 import io.userfeeds.cryptocache.logger
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicInteger
 
 @Component
 class OpenSeaCacheUpdater(
@@ -11,6 +13,8 @@ class OpenSeaCacheUpdater(
         private val repository: OpenSeaRepository,
         private val service: OpenSeaService
 ) {
+
+    val failsMap = ConcurrentHashMap<String, AtomicInteger>()
 
     @Scheduled(initialDelay = 60 * 60 * 1000, fixedDelay = 60 * 60 * 1000)
     fun updateCache() {
@@ -31,5 +35,26 @@ class OpenSeaCacheUpdater(
         val newItemsWithoutFails = newItems.filter { it.externalLink != "https://tokntalk.club/404" }
         cache.update(newItemsWithoutFails)
         repository.saveAll(newItemsWithoutFails)
+    }
+
+    @Scheduled(fixedDelay = 60 * 1000)
+    fun updateBadCache() {
+        val badStuff = repository.findByExternalLink("https://tokntalk.club/404")
+        val newBadStuff = badStuff.filter { failsMap[it.context]?.get() ?: 0 < 10 }
+        if (newBadStuff.isNotEmpty()) {
+            logger.warn("New bad stuff: ${newBadStuff.size}\n${newBadStuff.joinToString(separator = "\n")}")
+        }
+        val newItems = newBadStuff
+                .map(OpenSeaData::context)
+                .toObservable()
+                .flatMap(service::loadData)
+                .toList()
+                .blockingGet()
+        val (newItemsWithoutFails, fails) = newItems.partition { it.externalLink != "https://tokntalk.club/404" }
+        cache.update(newItemsWithoutFails)
+        repository.saveAll(newItemsWithoutFails)
+        fails.forEach {
+            failsMap[it.context] = failsMap.getOrDefault(it.context, AtomicInteger()).apply { incrementAndGet() }
+        }
     }
 }

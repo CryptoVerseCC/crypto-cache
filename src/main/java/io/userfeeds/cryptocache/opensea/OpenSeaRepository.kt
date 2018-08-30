@@ -4,7 +4,10 @@ import org.springframework.data.jpa.repository.JpaRepository
 import javax.persistence.Entity
 import javax.persistence.Id
 
-interface OpenSeaRepository : JpaRepository<OpenSeaData, String>
+interface OpenSeaRepository : JpaRepository<OpenSeaData, String> {
+
+        fun findByExternalLink(externalLink: String): List<OpenSeaData>
+}
 
 @Entity
 data class OpenSeaData(
