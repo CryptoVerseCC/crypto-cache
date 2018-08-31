@@ -6,7 +6,7 @@ import io.userfeeds.cryptocache.opensea.OpenSeaItemInterceptor
 typealias ContextItem = MutableMap<String, Any>
 
 val ContextItem.target
-    get() = this["target"] as String?
+    get() = this["target"] as? String
 
 val ContextItem.context
     get() = this["context"] as String?
