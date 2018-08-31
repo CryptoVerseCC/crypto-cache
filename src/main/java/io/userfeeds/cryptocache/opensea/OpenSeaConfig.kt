@@ -10,6 +10,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 @Configuration
 class OpenSeaConfig {
@@ -19,6 +20,7 @@ class OpenSeaConfig {
             .addConverterFactory(moshiConverterFactory)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.from(Executors.newFixedThreadPool(10))))
             .client(OkHttpClient.Builder()
+                    .readTimeout(20, TimeUnit.SECONDS)
                     .addInterceptor {
                         it.proceed(it.request().newBuilder().header("X-API-KEY", "51a17355a4574864949683e0217647d6").build())
                     }

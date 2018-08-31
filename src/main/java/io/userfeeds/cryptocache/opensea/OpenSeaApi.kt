@@ -4,6 +4,7 @@ import com.squareup.moshi.Json
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface OpenSeaApi {
 
@@ -12,11 +13,22 @@ interface OpenSeaApi {
             @Path("address") address: String,
             @Path("token") token: String): Observable<OpenSeaDataFromApi>
 
+    @GET("assets/?order_by=current_price&order_direction=asc&limit=6")
+    fun cheapTokens(
+            @Query("asset_contract_address") contractAddress: String): Observable<AssetsWrapperFromApi>
+
+    data class AssetsWrapperFromApi(
+            @Json(name = "assets") val assets: List<OpenSeaDataFromApi>
+    )
+
     data class OpenSeaDataFromApi(
+            @Json(name = "token_id") val tokenId: String,
             @Json(name = "background_color") val backgroundColor: String?,
             @Json(name = "external_link") val externalLink: String?,
             @Json(name = "name") val name: String?,
             @Json(name = "image_url") val imageUrl: String?,
-            @Json(name = "image_preview_url") val imagePreviewUrl: String?
+            @Json(name = "image_preview_url") val imagePreviewUrl: String?,
+            @Json(name = "current_price") val currentPrice: String?,
+            @Json(name = "sell_orders") val sellOrders: List<Any>?
     )
 }
