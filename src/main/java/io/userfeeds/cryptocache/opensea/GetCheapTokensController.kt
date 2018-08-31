@@ -13,7 +13,8 @@ class GetCheapTokensController(private val api: OpenSeaApi) {
         val (ethereum, contractAddress) = id.split(":")
         check(ethereum == "ethereum")
         val response = api.cheapTokens(contractAddress).blockingSingle()
-        val items = response.assets.map {
+        val withSellOrders = response.assets.filter { it.sellOrders?.size ?: 0 > 0 }
+        val items = withSellOrders.map {
             val tokenId = it.tokenId
             val context = "ethereum:$contractAddress:$tokenId"
             mutableMapOf(
