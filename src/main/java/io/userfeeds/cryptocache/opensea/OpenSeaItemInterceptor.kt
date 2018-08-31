@@ -4,6 +4,7 @@ import io.reactivex.rxkotlin.toObservable
 import io.userfeeds.cryptocache.ContextItem
 import io.userfeeds.cryptocache.about
 import io.userfeeds.cryptocache.context
+import io.userfeeds.cryptocache.target
 import org.springframework.stereotype.Component
 
 @Component
@@ -21,6 +22,7 @@ class OpenSeaItemInterceptor(private val openSeaCache: OpenSeaCache) {
         val contexts = mutableSetOf<String>()
         newAllItems.forEach { rootItem ->
             visitor.visit(rootItem) { item ->
+                item.target?.takeIf { it.matches(Regex("^ethereum:0x[0-9a-f]{40}:\\d+$")) }?.let(contexts::add)
                 item.context?.let(contexts::add)
                 item.about?.takeIf { it.matches(Regex("^ethereum:0x[0-9a-f]{40}:\\d+$")) }?.let(contexts::add)
             }
@@ -34,16 +36,22 @@ class OpenSeaItemInterceptor(private val openSeaCache: OpenSeaCache) {
             openSeaDataByContext: Map<String, OpenSeaData>) {
         newAllItems.forEach { rootItem ->
             visitor.visit(rootItem) { item ->
+                item.target?.let { ctx ->
+                    val targetData = openSeaDataByContext[ctx]
+                    if (targetData != null) {
+                        item["target_info"] = ContextInfoApiModel(targetData)
+                    }
+                }
                 item.context?.let { ctx ->
-                    val openSeaData = openSeaDataByContext[ctx]
-                    if (openSeaData != null) {
-                        item["context_info"] = ContextInfoApiModel(openSeaData)
+                    val contextData = openSeaDataByContext[ctx]
+                    if (contextData != null) {
+                        item["context_info"] = ContextInfoApiModel(contextData)
                     }
                 }
                 item.about?.let { about ->
-                    val openSeaData = openSeaDataByContext[about]
-                    if (openSeaData != null) {
-                        item["about_info"] = ContextInfoApiModel(openSeaData)
+                    val aboutData = openSeaDataByContext[about]
+                    if (aboutData != null) {
+                        item["about_info"] = ContextInfoApiModel(aboutData)
                     }
                 }
             }
