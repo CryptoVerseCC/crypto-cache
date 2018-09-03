@@ -13,7 +13,7 @@ interface OpenSeaApi {
             @Path("address") address: String,
             @Path("token") token: String): Observable<OpenSeaDataFromApi>
 
-    @GET("assets/?order_by=current_price&order_direction=asc&limit=6")
+    @GET("assets/?order_by=current_price&order_direction=asc&limit=10")
     fun cheapTokens(
             @Query("asset_contract_address") contractAddress: String): Observable<AssetsWrapperFromApi>
 
@@ -28,7 +28,12 @@ interface OpenSeaApi {
             @Json(name = "name") val name: String?,
             @Json(name = "image_url") val imageUrl: String?,
             @Json(name = "image_preview_url") val imagePreviewUrl: String?,
+            @Json(name = "owner") val owner: OpenSeaOwner,
             @Json(name = "current_price") val currentPrice: String?,
-            @Json(name = "sell_orders") val sellOrders: List<Any>?
+            @Json(name = "sell_orders") val sellOrders: List<Map<String, Any>>?
+    )
+
+    data class OpenSeaOwner(
+            @Json(name = "address") val address: String
     )
 }
