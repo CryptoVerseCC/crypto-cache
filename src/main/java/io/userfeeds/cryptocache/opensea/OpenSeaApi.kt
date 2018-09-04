@@ -11,11 +11,19 @@ interface OpenSeaApi {
     @GET("asset/{address}/{token}/")
     fun loadData(
             @Path("address") address: String,
-            @Path("token") token: String): Observable<OpenSeaDataFromApi>
+            @Path("token") token: String
+    ): Observable<OpenSeaDataFromApi>
+
+    @GET("assets/?limit=100")
+    fun loadDataMultiple(
+            @Query("asset_contract_address") address: String,
+            @Query("token_ids") tokens: List<String>
+    ): Observable<AssetsWrapperFromApi>
 
     @GET("assets/?order_by=current_price&order_direction=asc&limit=10")
     fun cheapTokens(
-            @Query("asset_contract_address") contractAddress: String): Observable<AssetsWrapperFromApi>
+            @Query("asset_contract_address") contractAddress: String
+    ): Observable<AssetsWrapperFromApi>
 
     data class AssetsWrapperFromApi(
             @Json(name = "assets") val assets: List<OpenSeaDataFromApi>

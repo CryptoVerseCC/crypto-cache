@@ -1,6 +1,5 @@
 package io.userfeeds.cryptocache.opensea
 
-import io.reactivex.rxkotlin.toObservable
 import io.userfeeds.cryptocache.logger
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
@@ -21,20 +20,14 @@ class OpenSeaCacheUpdater(
         val existing = repository.findAll()
         val bad = existing.filter { it.externalLink == "https://tokntalk.club/404" }
         if (bad.isNotEmpty()) {
-            logger.warn("Failed amount: ${bad.size}\n${bad.joinToString(separator = "\n")}")
+            logger.warn("Bad amount: ${bad.size}\n${bad.joinToString(separator = "\n")}")
         }
-        val newItems = existing
-                .map(OpenSeaData::context)
-                .toObservable()
-                .buffer(2)
-                .concatMap {
-                    it.toObservable().flatMap(service::loadData)
-                }
-                .toList()
+        val newItems = service.loadDataMultiple(existing.map(OpenSeaData::context))
                 .blockingGet()
         val newItemsWithoutFails = newItems.filter { it.externalLink != "https://tokntalk.club/404" }
         cache.update(newItemsWithoutFails)
         repository.saveAll(newItemsWithoutFails)
+        logger.info("OpenSea cache update: all=${newItems.size}, bad=${newItems.size - newItemsWithoutFails.size}")
     }
 
     @Scheduled(fixedDelay = 60 * 1000)
@@ -44,11 +37,7 @@ class OpenSeaCacheUpdater(
         if (newBadStuff.isNotEmpty()) {
             logger.warn("New bad stuff: ${newBadStuff.size}\n${newBadStuff.joinToString(separator = "\n")}")
         }
-        val newItems = newBadStuff
-                .map(OpenSeaData::context)
-                .toObservable()
-                .flatMap(service::loadData)
-                .toList()
+        val newItems = service.loadDataMultiple(newBadStuff.map(OpenSeaData::context))
                 .blockingGet()
         val (newItemsWithoutFails, fails) = newItems.partition { it.externalLink != "https://tokntalk.club/404" }
         cache.update(newItemsWithoutFails)
