@@ -24,6 +24,7 @@ class DecorateWithOpenSeaController(private val api: RankingApi) {
         override fun visit(item: MutableMap<String, Any>, accept: (MutableMap<String, Any>) -> Unit) {
             accept(item)
             (item.target as? MutableMap<String, Any>)?.let(accept)
+            item.replyTo?.let(accept)
             item.likes.forEach(accept)
             item.replies.forEach { visit(it, accept) }
         }
@@ -42,6 +43,10 @@ class DecorateWithOpenSeaController(private val api: RankingApi) {
         private val MutableMap<String, Any>.target
             @Suppress("UNCHECKED_CAST")
             get() = this["target"]
+
+        private val MutableMap<String, Any>.replyTo
+            @Suppress("UNCHECKED_CAST")
+            get() = this["reply_to"] as MutableMap<String, Any>?
 
         private val MutableMap<String, Any>.likes
             @Suppress("UNCHECKED_CAST")
