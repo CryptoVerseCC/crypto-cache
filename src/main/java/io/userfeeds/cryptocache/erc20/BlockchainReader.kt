@@ -20,7 +20,11 @@ class BlockchainReader(
         return Single.zip(
                 api.call(address, "0x06fdde03" /* name */),
                 api.call(address, "0x95d89b41" /* symbol */),
-                BiFunction { name, symbol -> TokenInfo(asset, name.getStringAtIndex(0), symbol.getStringAtIndex(0)) }
+                BiFunction { name, symbol ->
+                    val safeName = if (name.length >= 130) name.getStringAtIndex(0) else ""
+                    val safeSymbol = if (symbol.length >= 130) symbol.getStringAtIndex(0) else ""
+                    TokenInfo(asset, safeName, safeSymbol)
+                }
         )
     }
 }
