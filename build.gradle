@@ -63,6 +63,8 @@ dependencies {
     compile "io.reactivex.rxjava2:rxjava:2.1.7"
     compile "io.reactivex.rxjava2:rxkotlin:2.2.0"
 
+    compile "com.github.Userfeeds:ethereum-json-rpc-adapter:bdcac797ca9be1843c3f45c5465e1c1eb4759671"
+
     testCompile "org.springframework.boot:spring-boot-starter-test"
     testCompile "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
     testCompile "org.assertj:assertj-core:3.9.0"
