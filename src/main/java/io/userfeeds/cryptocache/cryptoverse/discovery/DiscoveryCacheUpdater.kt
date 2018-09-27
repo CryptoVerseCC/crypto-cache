@@ -37,6 +37,8 @@ class DiscoveryCacheUpdater(
         val facebook = api.socialProfiles("facebook", name, asset).blockingFirst().items
         val instagram = api.socialProfiles("instagram", name, asset).blockingFirst().items
         val github = api.socialProfiles("github", name, asset).blockingFirst().items
-        return Discovery(latest, twitter, facebook, instagram, github)
+        val discord = api.socialProfiles("discord", name, asset).blockingFirst().items
+        val telegram = api.socialProfiles("telegram", name, asset).blockingFirst().items
+        return Discovery(latest, twitter, facebook, instagram, github, discord, telegram)
     }
 }

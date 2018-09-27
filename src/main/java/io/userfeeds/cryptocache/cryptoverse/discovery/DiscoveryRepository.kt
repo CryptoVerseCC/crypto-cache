@@ -17,4 +17,12 @@ class DiscoveryRepository {
 }
 
 
-data class Discovery(val latest: List<Any>, val twitter: List<Any>, val facebook: List<Any>, val instagram: List<Any>, val github: List<Any>)
+data class Discovery(
+        val latest: List<Any>,
+        val twitter: List<Any>,
+        val facebook: List<Any>,
+        val instagram: List<Any>,
+        val github: List<Any>,
+        val discord: List<Any>,
+        val telegram: List<Any>
+)
