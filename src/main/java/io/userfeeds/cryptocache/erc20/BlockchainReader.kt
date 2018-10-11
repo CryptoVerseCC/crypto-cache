@@ -18,8 +18,8 @@ class BlockchainReader(
         check(asset.startsWith("ethereum:"))
         val address = asset.removePrefix("ethereum:")
         return Single.zip(
-                api.call(address, "0x06fdde03" /* name */),
-                api.call(address, "0x95d89b41" /* symbol */),
+                api.call(address, "0x06fdde03" /* name */).onErrorReturnItem(""),
+                api.call(address, "0x95d89b41" /* symbol */).onErrorReturnItem(""),
                 BiFunction { name, symbol ->
                     val safeName = if (name.length >= 130) name.getStringAtIndex(0) else ""
                     val safeSymbol = if (symbol.length >= 130) symbol.getStringAtIndex(0) else ""
