@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class GetCheapTokensController(private val api: OpenSeaApi) {
 
+    private val cache = mutableMapOf<String, ItemsWrapperWithTimestamp>()
+
     @GetMapping("/cheap_tokens")
     fun cheapTokens(@RequestParam("id") id: String): ItemsWrapper {
         val (ethereum, contractAddress) = id.split(":")
@@ -35,4 +37,18 @@ class GetCheapTokensController(private val api: OpenSeaApi) {
         }
         return ItemsWrapper(items)
     }
+
+    @GetMapping("/cheap_tokens_cached")
+    fun cheapTokensCached(@RequestParam("id") id: String): ItemsWrapper {
+        var wrapper = cache[id]
+                ?.takeIf { it.timestamp + 10 * 60 * 1000 > System.currentTimeMillis() }
+                ?.wrapper
+        if (wrapper == null) {
+            wrapper = cheapTokens(id)
+            cache[id] = ItemsWrapperWithTimestamp(System.currentTimeMillis(), wrapper)
+        }
+        return wrapper
+    }
 }
+
+class ItemsWrapperWithTimestamp(val timestamp: Long, val wrapper: ItemsWrapper)
